@@ -1,0 +1,491 @@
+/* ==========================
+   Global Style
+========================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  background-color: #fff;
+  line-height: 1.6;
+}
+
+/* ==========================
+   Navbar
+========================== */
+header {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  z-index: 50;
+  font-family: "Poppins", sans-serif; /* 🔹 dipindah ke sini biar global */
+}
+
+header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+header .logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  color: #14532d;
+  font-size: 1.1rem;
+}
+
+header .logo img {
+  height: 35px;
+  margin-right: 8px;
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  gap: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem; /* 🔹 kecilin teks navigasi */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Hover & Active */
+nav a:hover {
+  color: #14532d;
+  font-weight: 600;
+}
+
+nav a.active {
+  color: #14532d;
+  font-weight: 700;
+}
+
+/* Auth Buttons */
+.auth-buttons a {
+  margin-left: 1rem;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.auth-buttons .login {
+  color: #333;
+}
+
+.auth-buttons .register {
+  background-color: #14532d;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.auth-buttons .register:hover {
+  background-color: #0d3f22;
+}
+
+
+/* ==========================
+   Hero Section
+========================== */
+.hero {
+  position: relative;
+  height: calc(40vh + 80px); /* tinggi total ditambah 80px buat gap */
+  background: linear-gradient(white 0 50px, transparent 20px),
+              url("/assets/bali 1.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25); /* overlay supaya teks terbaca */
+  z-index: 1;
+}
+
+/* Hero content: teks kiri pada desktop */
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 8%; /* jarak dari kiri */
+  transform: translateY(-50%);
+  text-align: left;
+  color: #0E461A;
+  z-index: 10;
+  max-width: 620px;
+  padding: 0 1rem;
+}
+
+/* Judul hero */
+.hero-content h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+  color: #0E461A;
+}
+
+/* Subjudul hero (opsional) */
+.hero-content p {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0E461A;
+}
+
+
+
+
+
+/* ==========================
+   Profil RT 08
+========================== */
+#profil {
+  padding: 6rem 1.5rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#profil h2 {
+  color: #14532d;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+#profil p {
+  margin-bottom: 1rem;
+}
+
+#profil .ttd {
+  color: #14532d;
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+/* ==========================
+   Kalender
+========================== */
+#kalender {
+  background-color: #f9fafb;
+  padding: 6rem 1.5rem;
+  text-align: center;
+}
+
+#kalender h2 {
+  color: #14532d; 
+  font-size: 2rem; 
+  font-weight: 700; 
+  margin-bottom: 2.5rem;
+}
+
+/* Container kalender */
+.kalender-container {
+  background-color: #fff;
+  padding: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Header bulan + tombol navigasi */
+.kalender-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* jarak tombol dengan tulisan bulan/tahun */
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #14532d;
+  margin-bottom: 1rem;
+}
+
+/* Tombol navigasi bulan */
+.kalender-header button {
+  font-size: 1.5rem;        /* ukuran tombol lebih besar */
+  padding: 0.5rem 1rem;     /* beri ruang di dalam tombol */
+  border: none;
+  border-radius: 8px;
+  background-color: #4ade80; /* hijau tegas */
+  color: #064e3b;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.kalender-header button:hover {
+  background-color: #22c55e; /* hijau lebih gelap saat hover */
+}
+
+/* Baris nama hari */
+.kalender-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+/* Grid tanggal */
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+/* Setiap tanggal */
+.day {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover tanggal */
+.day:hover {
+  background-color: #d1fae5; /* hijau muda */
+}
+
+/* Tanggal terpilih */
+.day.selected {
+  background-color: #4ade80; /* hijau tegas */
+  font-weight: bold;
+  color: #064e3b; 
+} 
+
+/* Keterangan kegiatan */ 
+#event-details { 
+  margin-top: 1rem; 
+  font-size: 1rem; 
+  color: #374151; 
+} 
+
+/* Container titik */
+.dots-container {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+/* Titik kegiatan */
+.event-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #22c55e; /* hijau */
+  border-radius: 50%;
+}
+
+
+/* ==========================
+   Galeri
+========================== */
+#galeri {
+  padding: 6rem 1.5rem;
+  background-color: #fff;
+}
+
+#galeri h2 {
+  color: #14532d;  
+  font-size: 2rem;  
+  text-align: center;  
+  margin-bottom: 2.5rem;
+}
+
+/* Kontainer slider */
+.galeri-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Slider yang bisa digeser */
+.galeri-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Hide scrollbar di webkit (Chrome, Safari) */
+.galeri-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* Item galeri */
+.galeri-item {
+  min-width: 250px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galeri-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Gambar di galeri */
+.galeri-item img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Deskripsi */
+.galeri-item .desc {
+  padding: 1rem;
+  text-align: center;
+}
+
+.galeri-item .desc h3 {
+  color: #14532d;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.galeri-item .desc p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.galeri-item .desc span {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* Tombol navigasi slider */
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #22c55e; /* hijau */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 10;
+  transition: background-color 0.3s, transform 0.2s;
+  display: none; /* default hidden, muncul dinamis */
+}
+
+.slide-btn:hover {
+  background-color: #16a34a;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slide-btn.prev {
+  left: 0.5rem;
+}
+
+.slide-btn.next {
+  right: 0.5rem;
+}
+
+/* Tombol tambah galeri */
+#galeri .add-galeri-btn {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #22c55e;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+#galeri .add-galeri-btn:hover {
+  background-color: #16a34a;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Optional: responsive adjustments */
+@media (max-width: 640px) {
+  .galeri-item { 
+    min-width: 200px; 
+  } 
+
+  .slide-btn { 
+    font-size: 1.2rem; 
+    padding: 0.5rem 1rem; 
+  } 
+
+  #galeri .add-galeri-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ==========================
+   Footer
+========================== */
+footer {
+  background-color: #e5e7eb;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  margin-top: 5rem;
+}
+
+footer .icons {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+footer p {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+footer button {
+  border: 1px solid #14532d;
+  color: #14532d;
+  background: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+footer button:hover {
+  background-color: #14532d;
+  color: #fff;
+}
