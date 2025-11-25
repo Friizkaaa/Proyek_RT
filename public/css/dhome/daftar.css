@@ -1,0 +1,274 @@
+/* ==========================
+   Global Reset & Base Styles
+========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ==========================
+   Back Button
+========================== */
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: #14532d;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    background-color: #e5e7eb;
+    color: #0d3f22;
+}
+
+/* ==========================
+   Main Container
+========================== */
+.container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    gap: 40px;
+    align-items: center;
+}
+
+/* ==========================
+   Form Section
+========================== */
+.form-section {
+    flex: 1;
+    max-width: 400px;
+}
+
+.form-section h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #14532d;
+    margin-bottom: 0;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.875rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #1C4532;
+    box-shadow: 0 0 0 2px rgba(28, 69, 50, 0.1);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.toggle-password {
+    padding: 12px 16px;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-left: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-password:hover {
+    background-color: #e5e7eb;
+}
+
+.next-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #1C4532;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+}
+
+.next-btn:hover {
+    background-color: #153627;
+}
+
+/* ==========================
+   Image Section
+========================== */
+.image-section {
+    flex: 1;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: 500px;
+}
+
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: white;
+    text-align: center;
+}
+
+.overlay-text h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.overlay-text p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.overlay-text .source {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+/* ==========================
+   Login Prompt
+========================== */
+.login-prompt {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    text-align: left;
+    font-weight: 500;
+}
+
+.login-link {
+    color: #1C4532;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.login-link:hover {
+    color: #153627;
+    text-decoration: underline;
+}
+
+/* ==========================
+   Scrollable Form Area
+========================== */
+.scrollable-form {
+    max-height: calc(100vh - 220px); /* Sesuaikan dengan posisi atas */
+    overflow-y: auto;
+    padding-right: 8px; /* Ruang untuk scrollbar */
+}
+
+/* Optional: styling scrollbar */
+.scrollable-form::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-form::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+.scrollable-form::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Pastikan form tidak memiliki margin bawah yang mengganggu */
+.scrollable-form form {
+    padding-bottom: 20px;
+}
+
+/* ==========================
+   Responsive Design
+========================== */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .form-section,
+    .image-section {
+        max-width: 100%;
+    }
+
+    .image-section {
+        height: 300px;
+    }
+
+    .overlay-text {
+        padding: 20px;
+    }
+
+    .overlay-text h2 {
+        font-size: 1.5rem;
+    }
+}
