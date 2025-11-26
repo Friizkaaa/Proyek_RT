@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PageController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,15 +13,19 @@ use App\Http\Controllers\AuthController;
 */
 
 // Homepage (terbuka untuk semua)
-Route::get('/', function () {
-    return view('page.homepage');
-})->name('homepage');
+Route::get('/', [PageController::class, 'getHomePage'])->name('homepage');
 
 // Halaman Login
 Route::get('/page/masukpage', [AuthController::class, 'showLoginForm'])->name('login');
 
 // Proses Login
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('post-login');
+
+//Halaman Register
+Route::get('/page/daftarpage', [AuthController::class, 'showRegisterForm'])->name('register');
+
+//Proses Register
+Route::post('/register', [AuthController::class, 'register'])->name('post-register');
 
 // Halaman Daftar
 Route::get('/page/daftarpage', function () {

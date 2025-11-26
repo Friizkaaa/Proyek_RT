@@ -32,7 +32,20 @@
             </nav>
 
             <!-- Auth Section (akan diisi oleh JS) -->
-            <div id="auth-section"></div>
+            @auth
+            <div id="">
+                <button class="btn-welcome" onclick="showLogoutPopup()">
+                    Selamat Datang, {{ $username }}
+                </button>
+            </div>
+            @endauth
+
+            @guest
+                <div class="auth-buttons">
+                    <a href="/page/masukpage" class="btn-masuk">MASUK</a>
+                    <a href="/page/daftarpage" class="btn-daftar">DAFTAR</a>
+                </div>
+            @endguest
         </div>
         </header>
 
@@ -105,35 +118,39 @@
             <button class="slide-btn next">></button>
         </div>
 
-        <!-- Tombol Tambah Galeri (akan diisi oleh JS) -->
-        <div id="galeri-actions" class="text-center"></div>
+        @if (Auth::check() && Auth::user()->role === 'Warga')
+            <!-- Tombol Tambah Galeri (akan diisi oleh JS) -->
+            <div id="galeri-actions" class="text-center"></div>
+        @endif
     </div>
 </section>
 
-<!-- ==========================
-     FITUR WARGAKU
-========================== -->
-<section id="wargaku" class="py-20 bg-white">
-    <div class="container mx-auto px-6 max-w-6xl">
-        <h2 class="wargaku-title">Wargaku</h2>
+    <!-- ==========================
+        FITUR WARGAKU
+    ========================== -->
+    @if (Auth::check() && Auth::user()->role === 'Admin')
+        <section id="wargaku" class="py-20 bg-white">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <h2 class="wargaku-title">Wargaku</h2>
 
-        <!-- Tabel Daftar Warga -->
-        <div class="wargaku-container">
-            <table class="wargaku-table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Lengkap</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="wargaku-list">
-                    <!-- Data akan di-generate oleh JS -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+                <!-- Tabel Daftar Warga -->
+                <div class="wargaku-container">
+                    <table class="wargaku-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Lengkap</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wargaku-list">
+                            <!-- Data akan di-generate oleh JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- FOOTER -->
     <footer class="bg-gray-200 py-4 mt-20">

@@ -24,7 +24,7 @@
 
             <!-- Bagian scrollable: hanya field input -->
             <div class="scrollable-form">
-                <form action="#" method="POST">
+                <form action="{{ route('post-register') }}" method="POST">
                     @csrf
 
                     <!-- Email -->
@@ -109,13 +109,13 @@
                     <input type="hidden" name="role" value="warga">
                     <input type="hidden" name="kode_rt" value="8">
 
-                    <a href="/page/masukpage" class="next-btn" style="text-decoration: none; display: block; text-align: center;">Daftar</a>
+                    <button type="submit" class="next-btn" style="text-decoration: none; display: block; text-align: center;">Daftar</button>
                 </form>
             </div>
         </div>
 
         <div class="image-section">
-            <img src="/assets/bali-features.jpg" alt="Bali Features">
+            <img src="{{ asset('assets/bali_1.png') }}" alt="Bali Features">
             <div class="overlay-text">
                 <h2>Introducing new features</h2>
                 <p>Analyzing previous trends ensures that businesses always make the right decision. And as the scale of the decision and it’s impact magnifies...</p>

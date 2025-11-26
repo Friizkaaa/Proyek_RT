@@ -21,8 +21,13 @@
                 <a href="/page/daftarpage" class="register-link">Daftar sekarang</a>
             </p>
 
+            @if($errors->any())
+    {{ dd($errors->all()) }}
+@endif
+
             <!-- Form Login (tanpa action, handle via JS) -->
-            <form id="loginForm">
+            <form id="loginForm" method="POST" action={{ route('post-login') }}>
+                @csrf
                 <div class="input-group">
                     <label for="email">E-mail</label>
                     <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
@@ -41,7 +46,7 @@
         </div>
 
         <div class="image-section">
-            <img src="/assets/bali-features.jpg" alt="Bali Features">
+            <img src="{{ asset('assets/bali_1.png') }}" alt="Bali Features">
             <div class="overlay-text">
                 <h2>Introducing new features</h2>
                 <p>Analyzing previous trends ensures that businesses always make the right decision. And as the scale of the decision and it’s impact magnifies...</p>
@@ -66,22 +71,22 @@
         });
 
         // Simulasi login (frontend-only)
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // document.getElementById('loginForm').addEventListener('submit', function(e) {
+        //     e.preventDefault();
             
-            const email = document.getElementById('email').value.trim();
-            let nama = email.split('@')[0]
-                .replace(/\./g, ' ')
-                .replace(/[^a-zA-Z\s]/g, '')
-                .replace(/\b\w/g, l => l.toUpperCase())
-                .trim() || 'Warga';
+        //     const email = document.getElementById('email').value.trim();
+        //     let nama = email.split('@')[0]
+        //         .replace(/\./g, ' ')
+        //         .replace(/[^a-zA-Z\s]/g, '')
+        //         .replace(/\b\w/g, l => l.toUpperCase())
+        //         .trim() || 'Warga';
 
-            // Simpan sebagai WARGA
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userNama', nama);
-            localStorage.setItem('userRole', 'warga'); // <-- ini yang penting
+        //     // Simpan sebagai WARGA
+        //     localStorage.setItem('isLoggedIn', 'true');
+        //     localStorage.setItem('userNama', nama);
+        //     localStorage.setItem('userRole', 'warga'); // <-- ini yang penting
 
-            window.location.href = '/';
+        //     window.location.href = '/';
         });
     </script>
 </body>

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+use App\Models\User;
+
 class AuthController extends Controller
 {
     // Tampilkan halaman login
@@ -33,6 +35,45 @@ class AuthController extends Controller
         throw ValidationException::withMessages([
             'email' => ['Email atau password salah.'],
         ]);
+    }
+
+    //
+    public function showRegisterForm() 
+    {
+        return view('page.daftarpage');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email'             => 'required|email|unique:users,email',
+            'password'          => 'required|min:6',
+            'kode_warga'        => 'required',
+            'nama_lengkap'      => 'required',
+            'nik'               => 'required|digits:16',
+            'alamat'            => 'required',
+            'tanggal_lahir'     => 'required|date',
+            'pekerjaan'         => 'required',
+            'status_keluarga'   => 'required|in:kepala_keluarga,anggota_keluarga,lajang,janda/duda',
+            'no_hp'             => 'required|digits_between:10,13',
+            'username'          => 'required|unique:users,username',
+        ]);
+
+        User::create([
+            'username'          => $request->username,
+            'email'             => $request->email,
+            'password'          => bcrypt($request->password),
+            'kode_warga'        => $request->kode_warga,
+            'nama_lengkap'      => $request->nama_lengkap,
+            'nik'               => $request->nik,
+            'alamat'            => $request->alamat,
+            'tanggal_lahir'     => $request->tanggal_lahir,
+            'pekerjaan'         => $request->pekerjaan,
+            'status_keluarga'   => $request->status_keluarga,
+            'no_hp'             => $request->no_hp,
+        ]);
+
+        return redirect()->route('login')->with('success','Registrasi berhasil, silakan login!');
     }
 
     // Logout
