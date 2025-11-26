@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>RT.08 Seminyak</title>
     <link rel="stylesheet" href="/css/dhome/homepage.css?v=3">
     <style>
@@ -581,13 +582,14 @@ window.showLogoutPopup = function() {
 
 // Fungsi handle logout
 function handleLogout() {
-    // Hapus semua data login dari localStorage
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userNama');
-    localStorage.removeItem('userRole');
-
-    // Redirect ke halaman utama (atau reload)
-    window.location.reload();
+    fetch("/logout", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+        }
+    }).then(() => {
+        window.location.href = "/";
+    });
 }
 
     </script>
