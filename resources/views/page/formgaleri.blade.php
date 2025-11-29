@@ -16,7 +16,8 @@
                 <strong>MOHON PERHATIKAN!</strong> Postingan tidak dapat dihapus atau ditarik setelah dikirim.
             </div>
 
-            <form id="galeriForm">
+            <form id="galeriForm" method="POST" action="{{ route('post-galeri') }}" enctype="multipart/form-data">
+                @csrf
                 <!-- Foto -->
                 <div class="input-group">
                     <label for="foto">Foto</label>
@@ -63,7 +64,7 @@
         }
 
         document.getElementById('galeriForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // e.preventDefault();
 
             const judul = document.getElementById('judul').value.trim();
             const deskripsi = document.getElementById('deskripsi').value.trim();
@@ -76,27 +77,27 @@
                 return;
             }
 
-            const tanggal = tanggalInput.value;
-            const file = fotoInput.files[0];
+            // const tanggal = tanggalInput.value;
+            // const file = fotoInput.files[0];
 
             // Untuk demo frontend-only: simpan nama file (bukan file asli)
             // Di backend nanti, file di-upload dan disimpan path-nya
-            const fotoNama = file.name;
+            // const fotoNama = file.name;
 
             // Ambil galeri lama
-            let galeriList = JSON.parse(localStorage.getItem('galeriRT08')) || [];
+            // let galeriList = JSON.parse(localStorage.getItem('galeriRT08')) || [];
 
             // Tambahkan entri baru
-            galeriList.unshift({
-                id: Date.now(),
-                foto: fotoNama, // hanya nama file (karena tidak ada upload beneran)
-                judul: judul,
-                deskripsi: deskripsi,
-                tanggal: tanggal
-            });
+            // galeriList.unshift({
+            //     id: Date.now(),
+            //     foto: fotoNama, // hanya nama file (karena tidak ada upload beneran)
+            //     judul: judul,
+            //     deskripsi: deskripsi,
+            //     tanggal: tanggal
+            // });
 
             // Simpan
-            localStorage.setItem('galeriRT08', JSON.stringify(galeriList));
+            // localStorage.setItem('galeriRT08', JSON.stringify(galeriList));
 
             // Buat popup sukses
             const successPopup = document.createElement('div');

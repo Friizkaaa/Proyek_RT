@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\PageController;
 use App\Models\User;
 
@@ -21,26 +22,28 @@ Route::get('/page/masukpage', [AuthController::class, 'showLoginForm'])->name('l
 // Proses Login
 Route::post('/login', [AuthController::class, 'login'])->name('post-login');
 
-//Halaman Register
+// Halaman Register
 Route::get('/page/daftarpage', [AuthController::class, 'showRegisterForm'])->name('register');
 
-//Proses Register
+// Proses Register
 Route::post('/register', [AuthController::class, 'register'])->name('post-register');
 
-// Halaman Daftar
-Route::get('/page/daftarpage', function () {
-    return view('page.daftarpage');
-})->name('daftar');
+// Proses Upload Foto Galeri
+Route::post('/page/formgaler', [GaleriController::class, 'postFormGaleri'])->name('post-galeri');
 
 // Form Galeri
-Route::get('/page/formgaleri', function () {
-    return view('page.formgaleri');
-})->name('formgaleri');
+Route::get('/page/formgaleri', [GaleriController::class, 'getFormGaleri'])->name('get-galeri');
 
 // Form Tambah Kegiatan
-Route::get('/page/formact', function () {
-    return view('page.formact');
-})->name('formact');
+Route::get('page/formact', [PageController::class, 'getTambahKegiatan'])->name('formact');
+
+// Proses Tambah Kegiatan
+Route::post('/page/formact', [PageController::class, 'postTambahKegiatan'])->name('post-formact');
+
+// Form Tambah Kegiatan
+// Route::get('/page/formact', function () {
+//     return view('page.formact');
+// })->name('formact');
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -14,7 +14,8 @@
             <!-- Ambil tanggal dari URL -->
             <p id="tanggal-label">Tanggal: <strong id="tanggal-value"></strong></p>
 
-            <form id="kegiatanForm">
+            <form id="kegiatanForm" method=" POST" action={{ route('post-formact') }}>
+                @csrf
                 <input type="hidden" id="tanggal" name="tanggal">
 
                 <div class="input-group">

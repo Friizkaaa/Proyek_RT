@@ -29,7 +29,9 @@
             <a href="#profil">PROFIL</a>
             <a href="#kalender">KALENDER</a>
             <a href="#galeri">GALERI</a>
-            <a href="#wargaku">WARGAKU</a>
+            @if (Auth::check() && Auth::user()->role === 'Admin')
+                <a href="#wargaku">WARGAKU</a>
+            @endif
             </nav>
 
             <!-- Auth Section (akan diisi oleh JS) -->
@@ -74,57 +76,72 @@
             </div>
         </section>
 
-<!-- ==========================
-     KALENDER KEGIATAN
-========================== -->
-<section id="kalender">
-    <div class="kalender-container">
-        <h2>Kalender Kegiatan</h2>
+        <!-- ==========================
+            KALENDER KEGIATAN
+        ========================== -->
+        <section id="kalender">
+            <div class="kalender-container">
+                <h2>Kalender Kegiatan</h2>
 
-        <!-- Header Bulan dengan tombol navigasi -->
-        <div class="kalender-header">
-            <button id="prev-month"><</button>
-            <span id="calendar-month"></span>
-            <button id="next-month">></button>
-        </div>
+                <!-- Header Bulan dengan tombol navigasi -->
+                <div class="kalender-header">
+                    <button id="prev-month"><</button>
+                    <span id="calendar-month"></span>
+                    <button id="next-month">></button>
+                </div>
 
-        <!-- Nama Hari -->
-        <div class="kalender-weekdays">
-            <div>M</div><div>S</div><div>Sl</div><div>R</div><div>K</div><div>J</div><div>Sb</div>
-        </div>
+                <!-- Nama Hari -->
+                <div class="kalender-weekdays">
+                    <div>M</div><div>S</div><div>Sl</div><div>R</div><div>K</div><div>J</div><div>Sb</div>
+                </div>
 
-        <!-- Grid Tanggal -->
-        <div id="calendar"></div>
+                <!-- Grid Tanggal -->
+                <div id="calendar"></div>
 
-        <!-- Keterangan Event -->
-        <div id="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
-    </div>
-</section>
+                <!-- Keterangan Event -->
+                <div id="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
+            </div>
+        </section>
 
-<!-- ==========================
-     GALERI KEGIATAN
-========================== -->
-<section id="galeri" class="py-20 bg-white">
-    <div class="container mx-auto px-6 max-w-6xl">
-        <h2 class="text-3xl font-bold text-green-800 mb-10 text-center">Galeri</h2>
+    <!-- ==========================
+        GALERI KEGIATAN
+    ========================== -->
+    <section id="galeri" class="py-20 bg-white">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <h2 class="text-3xl font-bold text-green-800 mb-10 text-center">Galeri</h2>
 
-        <!-- Kontainer Slider --> 
-        <div class="galeri-slider-container px-4"> 
-            <button class="slide-btn prev"><</button> 
-             
-            <div class="galeri-slider" id="galeri-slider">
-                <!-- Item akan di-generate oleh JS -->
+            <!-- Kontainer Slider --> 
+            <div class="galeri-slider-container px-4"> 
+                <button class="slide-btn prev"><</button> 
+                
+                <div class="galeri-slider" id="">
+                    <!-- Item akan di-generate oleh JS -->
+                    @foreach ($foto as $item )
+                        <button class="btn-delete-galeri" onclick="">×</button>
+                        <img src="{{ asset('storage/' . $item->foto) }}" alt="">
+                        <div class="desc">
+                            <h3 class="font-bold text-green-800"></h3>
+                            <p class="text-sm mt-2 text-gray-700">
+                                 {{ $item->deskripsi }}
+                                <span class="block mt-1 text-gray-500"></span>
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+
+                <button class="slide-btn next">></button>
             </div>
 
-            <button class="slide-btn next">></button>
+            @if (Auth::check() && (Auth::user()->role === 'Warga' || Auth::user()->role === 'Admin'))
+                <!-- Tombol Tambah Galeri (akan diisi oleh JS) -->
+                <div id="galeri-actions" class="text-center">
+                    <a href="{{ route('get-galeri') }}" class="add-galeri-btn">
+                        Tambah Galeri / Berita
+                    </a>
+                </div>
+            @endif
         </div>
-
-        @if (Auth::check() && Auth::user()->role === 'Warga')
-            <!-- Tombol Tambah Galeri (akan diisi oleh JS) -->
-            <div id="galeri-actions" class="text-center"></div>
-        @endif
-    </div>
-</section>
+    </section>
 
     <!-- ==========================
         FITUR WARGAKU
@@ -145,6 +162,16 @@
                             </tr>
                         </thead>
                         <tbody id="wargaku-list">
+                            <tr>
+                                @foreach ( $users as $user )
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <button class="aksi-btn" onclick="lihatWarga(${warga.id})">Lihat</button>
+                                </td>
+                                @endforeach
+                            </tr>
+                            
                             <!-- Data akan di-generate oleh JS -->
                         </tbody>
                     </table>
@@ -382,12 +409,12 @@
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
         // Load data galeri dari localStorage
-        let galeri = JSON.parse(localStorage.getItem('galeriRT08')) || [
-            { id: 1, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 1', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juni 2024' },
-            { id: 2, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 2', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juli 2024' },
-            { id: 3, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 3', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Agustus 2024' },
-            { id: 4, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 4', deskripsi: 'Contoh kegiatan desa.', tanggal: 'September 2024' }
-        ];
+        // let galeri = JSON.parse(localStorage.getItem('galeriRT08')) || [
+        //     { id: 1, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 1', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juni 2024' },
+        //     { id: 2, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 2', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juli 2024' },
+        //     { id: 3, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 3', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Agustus 2024' },
+        //     { id: 4, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 4', deskripsi: 'Contoh kegiatan desa.', tanggal: 'September 2024' }
+        // ];
 
         // Render galeri
         function renderGaleri() {
