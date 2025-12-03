@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>RT.02 Ibru</title>
     <link rel="stylesheet" href="/css/dhome/homepage.css?v=3">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
     <style>
         html {
             scroll-behavior: smooth;
@@ -99,7 +101,11 @@
                 </div>
 
                 <!-- Grid Tanggal -->
+                @if (Auth::check() && Auth::user()->role === 'Admin')
                 <div id="calendar" class="calendar-grid"></div>
+                @else
+                <div id="calendar" class="calendar-grid"><a href="{{ route('login') }}"></a></div>
+                 @endif
 
                 <!-- Keterangan Event -->
                 <div id="event-details" class="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
@@ -115,30 +121,33 @@
 
                 <!-- Container Utama -->
                 <div class="flex flex-wrap justify-start gap-6">
-
+                    @foreach ($fotos as $foto )
                     <!-- Card Galeri (lebar lebih kecil, posisi kiri) -->
                     <div class="galeri-card w-full max-w-xs"> <!-- ⬅️ max-w-xs = lebih kecil -->
                         <!-- Gambar Placeholder -->
-                        <img src="https://via.placeholder.com/300x200?text=haihai" alt="Gambar Galeri" class="w-full h-48 object-cover rounded-md mb-4">
+                        <img src="{{ $foto->foto ? Storage::url($foto->foto) : asset('bali_1.png') }}" alt="Gambar Galeri" class="w-full h-48 object-cover rounded-md mb-4">
 
                         <!-- Judul -->
-                        <h3 class="font-bold text-green-800 text-center mb-2">haihai</h3>
+                        <h3 class="font-bold text-green-800 text-center mb-2">{{ $foto->judul }}</h3>
 
                         <!-- Deskripsi -->
-                        <p class="text-sm text-gray-700 text-center mb-1">obejqnasdz</p>
+                        <p class="text-sm text-gray-700 text-center mb-1">{{ $foto->deskripsi }}</p>
 
                         <!-- Tanggal -->
-                        <p class="text-xs text-gray-500 text-center">- 2025-11-25</p>
+                        <p class="text-xs text-gray-500 text-center">- {{ $foto->tanggal }}</p>
+                        
                     </div>
-
+                    @endforeach
                 </div>
 
                 <!-- Tombol Tambah Galeri (ditempatkan di kanan bawah) -->
+                @if (Auth::check() && Auth::user()->role === 'Admin')
                 <div class="mt-8 flex justify-end">
-                    <a href="#" class="add-galeri-btn">
+                    <a href="{{ route('get-galeri') }}" class="add-galeri-btn">
                         Tambah Galeri / Berita
                     </a>
                 </div>
+                @endif
 
             </div>
         </section>
@@ -162,23 +171,92 @@
                             </tr>
                         </thead>
                         <tbody id="wargaku-list">
+                            @foreach ( $users as $user )
                             <tr>
-                                @foreach ( $users as $user )
-                                <td></td>
-                                <td></td>
+                                <td>{{ $user->id}}</td>
+                                <td>{{ $user->nama_lengkap}}</td>
                                 <td>
-                                    <button class="aksi-btn" onclick="lihatWarga(${warga.id})">Lihat</button>
-                                </td>
-                                @endforeach
-                            </tr>
-                            
-                            <!-- Data akan di-generate oleh JS -->
+                                    <button class="aksi-btn" data-bs-toggle="modal" data-bs-target="#galeriModal" 
+                                    data-user-id="{{ $user->id }}"
+                                    data-user-nama-lengkap="{{ $user->nama_lengkap }}"
+                                    data-user-nik="{{ $user->nik }}"
+                                    data-user-alamat="{{ $user->alamat }}"
+                                    data-user-tgl="{{ $user->tanggal_lahir }}"
+                                    data-user-pekerjaan="{{ $user->pekerjaan }}"
+                                    data-user-status-keluarga="{{ $user->status_keluarga }}"
+                                    data-user-hp="{{ $user->no_hp }}"
+                                    >Lihat</button>
+                                </td>                                
+                            </tr>    
+                            @endforeach                        
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
     @endif
+
+    <!-- Modal -->
+    <div class="modal fade" id="galeriModal" tabindex="-1" aria-labelledby="galeriModalLabel" aria-hidden="true"> 
+        <div class="modal-dialog modal-lg"> <!-- modal-lg = ukuran besar -->
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="galeriModalLabel">Detail Warga</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body p-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">NAMA LENGKAP</h6>
+                                <p class="mb-0 fw-medium" id="detail-nama">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">NIK</h6>
+                                <p class="mb-0 fw-medium" id="detail-nik">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">ALAMAT</h6>
+                                <p class="mb-0 fw-medium" id="detail-alamat">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">TANGGAL LAHIR</h6>
+                                <p class="mb-0 fw-medium" id="detail-tgl">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">PEKERJAAN</h6>
+                                <p class="mb-0 fw-medium" id="detail-pekerjaan">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">STATUS KELUARGA</h6>
+                                <p class="mb-0 fw-medium" id="detail-status-keluarga">-</p>
+                            </div>
+                            
+                            <div class="detail-item mb-3 pb-3 border-bottom">
+                                <h6 class="text-muted mb-1 fw-semibold">NO. HP</h6>
+                                <p class="mb-0 fw-medium" id="detail-hp">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="bg-gray-200 py-4 mt-20">
@@ -190,6 +268,7 @@
     </footer>
 
     <!-- ✅ SCRIPT BUAT NAVBAR ACTIVE -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
       const navLinks = document.querySelectorAll("nav a");
       navLinks.forEach(link => {
@@ -317,102 +396,180 @@
     <!-- ✅ SCRIPT UNTUK GALERI DINAMIS + HAPUS -->
     <script>
     // ... [SCRIPT GALLERY TETAP DIPERTAHANKAN APA ADANYA KARENA BUKAN BAGIAN KALENDER]
-    document.addEventListener("DOMContentLoaded", function () {
-        const galeriSlider = document.getElementById('galeri-slider');
-        const slideBtnPrev = document.querySelector('.slide-btn.prev');
-        const slideBtnNext = document.querySelector('.slide-btn.next');
+        document.addEventListener("DOMContentLoaded", function () {
+            const galeriSlider = document.getElementById('galeri-slider');
+            const slideBtnPrev = document.querySelector('.slide-btn.prev');
+            const slideBtnNext = document.querySelector('.slide-btn.next');
 
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-        // Load data galeri dari localStorage
-        // let galeri = JSON.parse(localStorage.getItem('galeriRT08')) || [
-        //     { id: 1, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 1', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juni 2024' },
-        //     { id: 2, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 2', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juli 2024' },
-        //     { id: 3, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 3', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Agustus 2024' },
-        //     { id: 4, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 4', deskripsi: 'Contoh kegiatan desa.', tanggal: 'September 2024' }
-        // ];
+            // Load data galeri dari localStorage
+            // let galeri = JSON.parse(localStorage.getItem('galeriRT08')) || [
+            //     { id: 1, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 1', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juni 2024' },
+            //     { id: 2, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 2', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Juli 2024' },
+            //     { id: 3, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 3', deskripsi: 'Contoh kegiatan desa.', tanggal: 'Agustus 2024' },
+            //     { id: 4, foto: 'galeri-placeholder.jpg', judul: 'Galeri Kegiatan 4', deskripsi: 'Contoh kegiatan desa.', tanggal: 'September 2024' }
+            // ];
 
-        // Render galeri
-        function renderGaleri() {
-            galeriSlider.innerHTML = '';
-            galeri.forEach(item => {
-                const itemEl = document.createElement('div');
-                itemEl.className = 'galeri-item';
-                
-                let deleteBtn = '';
-                if (isLoggedIn) {
-                    deleteBtn = `<button class="btn-delete-galeri" onclick="confirmDeleteGaleri(${item.id})">×</button>`;
-                }
+            // Render galeri
+            function renderGaleri() {
+                galeriSlider.innerHTML = '';
+                galeri.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'galeri-item';
+                    
+                    let deleteBtn = '';
+                    if (isLoggedIn) {
+                        deleteBtn = `<button class="btn-delete-galeri" onclick="confirmDeleteGaleri(${item.id})">×</button>`;
+                    }
 
-                itemEl.innerHTML = `
-                    ${deleteBtn}
-                    <img src="${item.foto}" alt="${item.judul}">
-                    <div class="desc">
-                        <h3 class="font-bold text-green-800">${item.judul}</h3>
-                        <p class="text-sm mt-2 text-gray-700">
-                            ${item.deskripsi}
-                            <span class="block mt-1 text-gray-500">- ${item.tanggal}</span>
-                        </p>
+                    itemEl.innerHTML = `
+                        ${deleteBtn}
+                        <img src="${item.foto}" alt="${item.judul}">
+                        <div class="desc">
+                            <h3 class="font-bold text-green-800">${item.judul}</h3>
+                            <p class="text-sm mt-2 text-gray-700">
+                                ${item.deskripsi}
+                                <span class="block mt-1 text-gray-500">- ${item.tanggal}</span>
+                            </p>
+                        </div>
+                    `;
+                    galeriSlider.appendChild(itemEl);
+                });
+            }
+
+            renderGaleri();
+
+            // Scroll buttons
+            if (slideBtnPrev && slideBtnNext) {
+                slideBtnPrev.addEventListener('click', () => {
+                    galeriSlider.scrollBy({ left: -300, behavior: 'smooth' });
+                });
+
+                slideBtnNext.addEventListener('click', () => {
+                    galeriSlider.scrollBy({ left: 300, behavior: 'smooth' });
+                });
+
+                // Auto show/hide buttons based on scroll
+                galeriSlider.addEventListener('scroll', () => {
+                    const maxScroll = galeriSlider.scrollWidth - galeriSlider.clientWidth;
+                    slideBtnPrev.style.display = galeriSlider.scrollLeft > 0 ? 'block' : 'none';
+                    slideBtnNext.style.display = galeriSlider.scrollLeft < maxScroll ? 'block' : 'none';
+                });
+
+                // Initial state
+                slideBtnPrev.style.display = 'none';
+            }
+        });
+
+        // Fungsi hapus galeri dengan popup kustom
+        window.confirmDeleteGaleri = function(id) {
+            const popup = document.createElement('div');
+            popup.className = 'delete-confirm-popup';
+
+            popup.innerHTML = ``
+            <!-- ... [isi popup hapus galeri, tetap dipertahankan karena bukan bagian kalender] -->
+            ``;
+
+            document.body.appendChild(popup);
+        };
+
+        function handleDeleteGaleri(id) {
+            // ... [logika hapus galeri tetap ada, karena bukan bagian kalender]
+        }
+
+        // ✅ SCRIPT UNTUK LOAD DAFTAR WARGA DARI LOCALSTORAGE
+        document.addEventListener("DOMContentLoaded", function () {
+            // ... [wargaku script tetap dipertahankan]
+        });
+
+        // Fungsi tampilkan popup logout
+        window.showLogoutPopup = function() {
+            const popup = document.createElement('div');
+            popup.className = 'logout-confirm-popup';
+
+            popup.innerHTML = `
+                <div class="logout-confirm-content">
+                    <h3>Apakah Anda yakin ingin keluar?</h3>
+                    <div class="logout-confirm-image">
+                        <img src="/assets/hapuspopup.png" alt="Konfirmasi Logout">
                     </div>
-                `;
-                galeriSlider.appendChild(itemEl);
-            });
-        }
+                    <div class="logout-confirm-buttons">
+                        <button class="logout-confirm-btn btn-cancel" onclick="document.body.removeChild(this.closest('.logout-confirm-popup'))">BATAL</button>
+                        <button class="logout-confirm-btn btn-logout" onclick="handleLogout()">LOG OUT</button>
+                    </div>
+                </div>
+            `;
 
-        renderGaleri();
+            document.body.appendChild(popup);
+        };
 
-        // Scroll buttons
-        if (slideBtnPrev && slideBtnNext) {
-            slideBtnPrev.addEventListener('click', () => {
-                galeriSlider.scrollBy({ left: -300, behavior: 'smooth' });
-            });
-
-            slideBtnNext.addEventListener('click', () => {
-                galeriSlider.scrollBy({ left: 300, behavior: 'smooth' });
-            });
-
-            // Auto show/hide buttons based on scroll
-            galeriSlider.addEventListener('scroll', () => {
-                const maxScroll = galeriSlider.scrollWidth - galeriSlider.clientWidth;
-                slideBtnPrev.style.display = galeriSlider.scrollLeft > 0 ? 'block' : 'none';
-                slideBtnNext.style.display = galeriSlider.scrollLeft < maxScroll ? 'block' : 'none';
-            });
-
-            // Initial state
-            slideBtnPrev.style.display = 'none';
-        }
-    });
-
-    // Fungsi hapus galeri dengan popup kustom
-    window.confirmDeleteGaleri = function(id) {
-        const popup = document.createElement('div');
-        popup.className = 'delete-confirm-popup';
-
-        popup.innerHTML = ``
-        <!-- ... [isi popup hapus galeri, tetap dipertahankan karena bukan bagian kalender] -->
-        ``;
-
-        document.body.appendChild(popup);
-    };
-
-    function handleDeleteGaleri(id) {
-        // ... [logika hapus galeri tetap ada, karena bukan bagian kalender]
-    }
-
-    // ✅ SCRIPT UNTUK LOAD DAFTAR WARGA DARI LOCALSTORAGE
-    document.addEventListener("DOMContentLoaded", function () {
-        // ... [wargaku script tetap dipertahankan]
-    });
-
-    // Fungsi tampilkan popup logout
-    window.showLogoutPopup = function() {
-        // ... [logout tetap ada]
-    };
-
-    function handleLogout() {
-        // ... [logout logic tetap ada]
+        function handleLogout() {
+            fetch("/logout", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            }
+        }).then(() => {
+            window.location.href = "/";
+        });
     }
     </script>
+
+    <script>
+        const modal = document.getElementById('galeriModal');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // tombol yg diklik
+
+            // Ambil nilai dari data-user-*
+            const nama = button.getAttribute('data-user-nama-lengkap');
+            const nik = button.getAttribute('data-user-nik');
+            const alamat = button.getAttribute('data-user-alamat');
+            const tgl = button.getAttribute('data-user-tgl');
+            const pekerjaan = button.getAttribute('data-user-pekerjaan');
+            const statusKeluarga = button.getAttribute('data-user-status-keluarga');
+            const hp = button.getAttribute('data-user-hp');
+
+            // Masukkan ke modal
+            document.getElementById('detail-nama').textContent = nama;
+            document.getElementById('detail-nik').textContent = nik;
+            document.getElementById('detail-alamat').textContent = alamat;
+            document.getElementById('detail-tgl').textContent = tgl;
+            document.getElementById('detail-pekerjaan').textContent = pekerjaan;
+            document.getElementById('detail-status-keluarga').textContent = statusKeluarga;
+            document.getElementById('detail-hp').textContent = hp;
+        });
+    </script>
+
+    <script>
+        const isLoggedIn = {{ Auth::check() ? true : false }};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                events: [
+                    
+                ]
+                eventClick: function(info) {
+
+                    if (!isLoggedIn) {
+                        // Redirect ke login
+                        window.location.href = "{{ route('login') }}";
+                        return;
+                    }
+
+                    // Jika sudah login → tampilkan detail
+                    alert("Kamu sudah login, event bisa dibuka!");
+                }
+            });
+
+            calendar.render();
+        });
+
+    </script>
+
 
 </body>
 </html>

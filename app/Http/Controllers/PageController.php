@@ -15,10 +15,10 @@ class PageController extends Controller
     public function getHomePage()
     {
         $username = Auth::check() ? Auth::user()->username : null;
-        $foto = Galeri::get();
+        $fotos = Galeri::get();
         $users = User::get();
 
-        return view('page.homepage', compact('username', 'foto', 'users'));
+        return view('page.homepage', compact('username', 'fotos', 'users'));
     }
 
     public function getTambahKegiatan()
