@@ -207,11 +207,11 @@ nav a.active {
   padding: 2rem;
   max-width: 700px;
   margin: 0 auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(73, 38, 38, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .kalender-header {
@@ -219,25 +219,32 @@ nav a.active {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #14532d;
-  margin-bottom: 1rem;
 }
 
 .kalender-header button {
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
+  width: 40px;
+  height: 40px;
   border: none;
   border-radius: 8px;
   background-color: #4ade80;
-  color: #064e3b;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .kalender-header button:hover {
   background-color: #22c55e;
+}
+
+#calendar-month {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a5276;
 }
 
 .kalender-weekdays {
@@ -245,54 +252,66 @@ nav a.active {
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-weight: 600;
-  color: #4b5563;
-  margin-bottom: 0.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  gap: 0.5rem;
 }
 
 #calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 0.5rem;
 }
 
 .day {
-  border: 1px solid #ccc;
+  background-color: #fff;
+  border: 1px solid #92aa96;
   border-radius: 8px;
-  padding: 10px 0;
-  text-align: center;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .day:hover {
-  background-color: #d1fae5;
+  background-color: #f3f4f6;
+}
+
+.day.has-event::after {
+  content: '•';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem; /* ⬅️ Ukuran lebih besar, lebih kelihatan */
+  color: #4ade80;
+  width: 12px;      /* ⬅️ Memberi ruang untuk titik */
+  height: 12px;     /* ⬅️ Memberi ruang untuk titik */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .day.selected {
-  background-color: #4ade80;
-  font-weight: bold;
-  color: #064e3b;
+  background-color: #a5c499;
+  border-color: #4ade80;
+  color: #1a5276;
+  font-weight: 600;
 }
 
 #event-details {
   margin-top: 1rem;
-  font-size: 1rem;
-  color: #374151;
-}
-
-.dots-container {
-  display: flex;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 4px;
-}
-
-.event-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background-color: #22c55e;
-  border-radius: 50%;
+  font-size: 0.95rem;
+  color: #4b5563;
+  padding: 12px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  text-align: center;
 }
 
 /* ==========================
@@ -310,110 +329,73 @@ nav a.active {
   margin-bottom: 2.5rem;
 }
 
-.galeri-slider-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 /* ==========================
-   Galeri - Slider Container (Fixed Position)
+   Galeri (Versi Statis - Card)
 ========================== */
-.galeri-slider {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 1rem;
-    padding: 1rem 0;
-    justify-content: flex-start; /* ⬅️ Mulai dari kiri, bukan tengah */
-    align-items: flex-start; /* ⬅️ Agar semua item sejajar atas */
+#galeri {
+  padding: 6rem 1.5rem;
+  background-color: #fff;
 }
 
-/* Pastikan container induk tidak membatasi lebar */
-.galeri-slider-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* ⬅️ Jangan rata tengah */
-    padding: 0 1rem; /* Tambahkan padding samping agar slide-btn tidak tertutup */
+#galeri h2 {
+  color: #14532d;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
-.galeri-slider::-webkit-scrollbar {
-  display: none;
-}
-
-.galeri-item {
-  min-width: 250px;
-  background-color: #f3f4f6;
-  border-radius: 10px;
-  overflow: hidden;
-  flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.galeri-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.galeri-item img {
+.galeri-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  height: 320px;
-  object-fit: cover;
-  display: block;
+  max-width: 320px; /* ⬅️ Lebar tetap kecil */
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
 }
 
-.galeri-item .desc {
-  padding: 1rem;
+.galeri-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.galeri-card h3 {
+  font-size: 1.1rem;
+  color: #14532d;
+  font-weight: 700;
+  margin: 0.5rem 0;
   text-align: center;
 }
 
-.galeri-item .desc h3 {
-  color: #14532d;
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.galeri-item .desc p {
+.galeri-card p {
   font-size: 0.9rem;
   color: #555;
+  margin: 0.25rem 0;
+  text-align: center;
 }
 
-.galeri-item .desc span {
-  display: block;
-  margin-top: 4px;
-  color: #888;
-  font-size: 0.8rem;
-}
-
-.slide-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+#galeri .add-galeri-btn {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
   background-color: #22c55e;
   color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.5rem;
-  z-index: 10;
-  transition: background-color 0.3s, transform 0.2s;
-  display: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 
-.slide-btn:hover {
+#galeri .add-galeri-btn:hover {
   background-color: #16a34a;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.slide-btn.prev {
-  left: 0.5rem;
-}
-
-.slide-btn.next {
-  right: 0.5rem;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 #galeri .add-galeri-btn {
@@ -1010,7 +992,16 @@ nav a.active {
   }
 }
 
+@media (max-width: 768px) {
+  .galeri-card {
+    max-width: 100%;
+  }
 
+  .mt-8.flex.justify-end {
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+}
 
 /* ==========================
    Footer
