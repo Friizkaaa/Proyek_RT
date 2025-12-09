@@ -40,4 +40,18 @@ class PageController extends Controller
 
         return redirect()->route('homepage')->with('success');
     }
+
+    public function getKegiatan()
+    {
+        $aktivitas = Kegiatan::all()->map(function ($kegiatan) {
+            return [
+                'id' => $kegiatan->id,
+                'tanggal' => $kegiatan->tanggal,
+                'kegiatan' => $kegiatan->kegiatan,
+                'url' => route('formact')
+            ];
+        });
+
+        return response()->json($aktivitas);
+    }
 }

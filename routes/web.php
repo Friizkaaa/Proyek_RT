@@ -35,10 +35,14 @@ Route::post('/page/formgaler', [GaleriController::class, 'postFormGaleri'])->nam
 Route::get('/page/formgaleri', [GaleriController::class, 'getFormGaleri'])->name('get-galeri');
 
 // Form Tambah Kegiatan
-Route::get('page/formact', [PageController::class, 'getTambahKegiatan'])->name('formact');
+Route::get('/page/formact', [PageController::class, 'getTambahKegiatan'])->name('formact');
 
 // Proses Tambah Kegiatan
 Route::post('/page/formact', [PageController::class, 'postTambahKegiatan'])->name('post-formact');
+
+// Json Kegiatan
+Route::get('/kegiatan', [PageController::class, 'getKegiatan'])->name('aktivitas');
+
 
 // Form Tambah Kegiatan
 // Route::get('/page/formact', function () {

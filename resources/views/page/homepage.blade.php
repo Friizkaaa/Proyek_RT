@@ -12,6 +12,18 @@
         html {
             scroll-behavior: smooth;
         }
+
+        .btn-white-green {
+            background-color: #ffffff;
+            color: #198754; /* Bootstrap green */
+            border: 2px solid #198754;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-white-green:hover {
+            background-color: #198754;
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -101,14 +113,12 @@
                 </div>
 
                 <!-- Grid Tanggal -->
-                @if (Auth::check() && Auth::user()->role === 'Admin')
                 <div id="calendar" class="calendar-grid"></div>
-                @else
-                <div id="calendar" class="calendar-grid"><a href="{{ route('login') }}"></a></div>
-                 @endif
 
                 <!-- Keterangan Event -->
                 <div id="event-details" class="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
+
+                <button onClick="window.location.href='{{ route('formact') }}'" class="btn btn-white-green w-50 d-flex justify-content-center">+ Tambah Kegiatan</button>
             </div>
         </section>
 
@@ -328,11 +338,20 @@
         let currentYear = new Date().getFullYear();
 
         // Data statis kegiatan (tanpa penyimpanan/hapus/tambah)
-        const staticEvents = {
-            "2025-12-03": ["Rapat RT pukul 19.00 WIB"],
-            "2025-12-10": ["Kerja bakti lingkungan pukul 07.00 WIB"],
-            "2025-12-24": ["Perayaan Natal Bersama Warga"]
-        };
+        const staticEvents = {} 
+
+        fetch('/kegiatan')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(item => {
+                    if (!staticEvents[item.tanggal]) {
+                        staticEvents[item.tanggal] = [];
+                    }
+                    staticEvents[item.tanggal].push(item.kegiatan);
+                });
+
+                renderCalendar(currentMonth, currentYear);
+            });
 
         function renderCalendar(month, year) {
             const firstDay = new Date(year, month, 1).getDay();
@@ -354,6 +373,19 @@
                 `;
             }
             calendar.innerHTML = html;
+
+            document.querySelectorAll(".day").forEach(day => {
+                day.addEventListener("click", () => {
+
+                    const isLoggedIn = @json(Auth::check());
+
+                    if (!isLoggedIn) {
+                        window.location.href = "{{ route('login') }}";
+                        return;
+                    }
+                });
+            });
+
 
             // Tambahkan interaksi klik untuk menampilkan info
             document.querySelectorAll(".day").forEach(day => {
@@ -543,21 +575,19 @@
     </script>
 
     <script>
-        const isLoggedIn = {{ Auth::check() ? true : false }};
-
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                events: [
-                    
-                ]
+            var calendar = new Calendar(calendarEl, {
+                events: '/kegiatan',
+
                 eventClick: function(info) {
 
-                    if (!isLoggedIn) {
+                    var eventObj = info.event;
+
+                    if (eventObj.url) {
                         // Redirect ke login
-                        window.location.href = "{{ route('login') }}";
-                        return;
+                        window.location.href = eventObj.url;
                     }
 
                     // Jika sudah login → tampilkan detail
