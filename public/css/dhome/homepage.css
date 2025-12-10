@@ -345,15 +345,19 @@ nav a.active {
 }
 
 .galeri-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 320px; /* ⬅️ Lebar tetap kecil */
-  background-color: #f3f4f6;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  padding: 1.25rem;
+    width: 320px !important;
+    flex-shrink: 0 !important;
+    max-width: none !important;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1.25rem;
+    background-color: #f3f4f6;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-right: 1.5rem; /* ← Jarak ke kanan */
+    margin-left: 0;       /* Biarkan kiri kosong agar alignment rapi */
 }
 
 .galeri-card img {
@@ -439,6 +443,15 @@ nav a.active {
     font-weight: 600;
 }
 
+/* Sembunyikan scrollbar tapi tetap bisa discroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+
 /* ==========================
    Kalender - Event Actions (Admin Only)
 ========================== */
@@ -514,25 +527,66 @@ nav a.active {
     margin-bottom: 0;
 }
 
-/* Tombol hapus inline (admin only) */
-.btn-delete-inline {
+/* Tombol hapus "×" di daftar kegiatan kalender */
+.kegiatan-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.kegiatan-item:last-child {
+    border-bottom: none;
+}
+
+.kegiatan-item span {
+    flex: 1;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.btn-delete-kegiatan {
     background: none;
     border: none;
     color: #ef4444;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     cursor: pointer;
-    padding: 0 4px;
-    line-height: 1;
-    opacity: 0.7;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
     transition: opacity 0.2s;
 }
 
-.btn-delete-inline:hover {
+.btn-delete-kegiatan:hover {
     opacity: 1;
     color: #b91c1c;
 }
 
+.btn-add-kegiatan {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #1C4532;
+    background-color: transparent;
+    color: #1C4532;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-add-kegiatan:hover {
+    background-color: #1C4532;
+    color: white;
+}
+  
 /* ==========================
    Kalender - Tombol Outline (Warga & Admin)
 ========================== */
@@ -650,21 +704,26 @@ nav a.active {
 .btn-delete-galeri {
     background: none;
     border: none;
-    color: #ef4444;
+    color: #ef4444; /* Merah */
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     cursor: pointer;
     padding: 4px;
     position: absolute;
     top: 8px;
     right: 8px;
     z-index: 5;
-    opacity: 0;
+    opacity: 0.7;
     transition: opacity 0.2s;
 }
 
-.galeri-item:hover .btn-delete-galeri {
+.galeri-card {
+    position: relative; /* Penting agar tombol absolut berada di dalam card */
+}
+
+.btn-delete-galeri:hover {
     opacity: 1;
+    color: #b91c1c;
 }
 
 /* ==========================

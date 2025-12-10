@@ -81,9 +81,6 @@
         <!-- ==========================
             KALENDER KEGIATAN
         ========================== -->
-<!-- ==========================
-    KALENDER KEGIATAN
-========================== -->
         <section id="kalender">
             <div class="kalender-container">
                 <h2>Kalender Kegiatan</h2>
@@ -101,16 +98,59 @@
                 </div>
 
                 <!-- Grid Tanggal -->
-                @if (Auth::check() && Auth::user()->role === 'Admin')
                 <div id="calendar" class="calendar-grid"></div>
-                @else
-                <div id="calendar" class="calendar-grid"><a href="{{ route('login') }}"></a></div>
-                 @endif
 
-                <!-- Keterangan Event -->
-                <div id="event-details" class="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
+                <!-- Daftar Kegiatan + Tombol Tambah -->
+                <div class="kegiatan-section">
+                    <div id="kegiatan-list" class="kegiatan-list">
+                        <p id="no-kegiatan-message" class="text-center text-gray-500 mt-4">Tidak ada kegiatan untuk bulan ini.</p>
+                    </div>
+
+                    <!-- Tombol Tambah Kegiatan (selalu tampil jika login) -->
+                    @if (Auth::check())
+                    <div class="text-center mt-4">
+                        <a href="/page/formact" class="btn-add-kegiatan">+ Tambah Kegiatan</a>
+                    </div>
+                    @endif
+                </div>
             </div>
         </section>
+
+<!-- Popup Konfirmasi Hapus Kegiatan -->
+<div id="hapusKegiatanPopup" class="delete-confirm-popup" style="display: none;">
+    <div class="delete-confirm-content">
+        <h3>Apakah anda yakin ingin menghapus kegiatan ini?</h3>
+        <div class="delete-confirm-image">
+            <img src="/assets/hapuspopup.png" alt="Konfirmasi Hapus">
+        </div>
+        <div class="delete-confirm-buttons">
+            <button class="delete-confirm-btn btn-cancel" onclick="document.getElementById('hapusKegiatanPopup').style.display='none'">
+                BATAL
+            </button>
+            <button class="delete-confirm-btn btn-delete" onclick="document.getElementById('hapusKegiatanPopup').style.display='none'">
+                YA
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup Konfirmasi Hapus Galeri -->
+<div id="hapusGaleriPopup" class="delete-confirm-popup" style="display: none;">
+    <div class="delete-confirm-content">
+        <h3>Apakah anda yakin ingin menghapus foto ini?</h3>
+        <div class="delete-confirm-image">
+            <img src="/assets/hapuspopup.png" alt="Konfirmasi Hapus">
+        </div>
+        <div class="delete-confirm-buttons">
+            <button class="delete-confirm-btn btn-cancel" onclick="document.getElementById('hapusGaleriPopup').style.display='none'">
+                BATAL
+            </button>
+            <button class="delete-confirm-btn btn-delete" onclick="document.getElementById('hapusGaleriPopup').style.display='none'">
+                YA
+            </button>
+        </div>
+    </div>
+</div>
 
         <!-- ==========================
             GALERI KEGIATAN (Versi Statis - Card Lebih Kecil, Tombol di Kanan Bawah)
@@ -119,38 +159,27 @@
             <div class="container mx-auto px-6 max-w-6xl">
                 <h2 class="text-3xl font-bold text-green-800 mb-10 text-center">Galeri</h2>
 
-                <!-- Container Utama -->
-                <div class="flex flex-wrap justify-start gap-6">
-                    @foreach ($fotos as $foto )
-                    <!-- Card Galeri (lebar lebih kecil, posisi kiri) -->
-                    <div class="galeri-card w-full max-w-xs"> <!-- ⬅️ max-w-xs = lebih kecil -->
-                        <!-- Gambar Placeholder -->
-                        <img src="{{ $foto->foto ? Storage::url($foto->foto) : asset('bali_1.png') }}" alt="Gambar Galeri" class="w-full h-48 object-cover rounded-md mb-4">
+            <!-- Container Utama - Paksa Horizontal -->
+                            <div class="flex overflow-x-auto gap-6 py-4 px-2" style="white-space: nowrap; display: flex; flex-wrap: nowrap; scroll-behavior: smooth;">
+                                @foreach ($fotos as $foto)
+                                    <div class="galeri-card flex-shrink-0 w-80 bg-gray-100 rounded-xl shadow-sm p-4">
+                                        <!-- Tombol hapus (hanya jika login) -->
+                                        @if (Auth::check())
+                                        <button class="btn-delete-galeri" onclick="document.getElementById('hapusGaleriPopup').style.display='flex'">×</button>
+                                        @endif
 
-                        <!-- Judul -->
-                        <h3 class="font-bold text-green-800 text-center mb-2">{{ $foto->judul }}</h3>
+                                        <img src="{{ $foto->foto ? Storage::url($foto->foto) : asset('bali_1.png') }}"
+                                            alt="Gambar Galeri"
+                                            class="w-full h-48 object-cover rounded-md mb-4">
 
-                        <!-- Deskripsi -->
-                        <p class="text-sm text-gray-700 text-center mb-1">{{ $foto->deskripsi }}</p>
-
-                        <!-- Tanggal -->
-                        <p class="text-xs text-gray-500 text-center">- {{ $foto->tanggal }}</p>
-                        
-                    </div>
-                    @endforeach
-                </div>
-
-                <!-- Tombol Tambah Galeri (ditempatkan di kanan bawah) -->
-                @if (Auth::check() && Auth::user()->role === 'Admin')
-                <div class="mt-8 flex justify-end">
-                    <a href="{{ route('get-galeri') }}" class="add-galeri-btn">
-                        Tambah Galeri / Berita
-                    </a>
-                </div>
-                @endif
-
-            </div>
-        </section>
+                                        <h3 class="font-bold text-green-800 text-center mb-2">{{ $foto->judul }}</h3>
+                                        <p class="text-sm text-gray-700 text-center mb-1">{{ $foto->deskripsi }}</p>
+                                        <p class="text-xs text-gray-500 text-center">- {{ $foto->tanggal }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </section>
 
     <!-- ==========================
         FITUR WARGAKU
@@ -314,25 +343,27 @@
     });
     </script>
 
-    <!-- ✅ SCRIPT KALENDER - HANYA INTERAKTIF UI (TANPA LOGIKA BACKEND) -->
+    <!-- ✅ SCRIPT KALENDER - DESAIN POPUP HAPUS (TANPA LOGIKA HAPUS) -->
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const calendar = document.getElementById("calendar");
-        const eventDetails = document.getElementById("event-details");
+        const kegiatanList = document.getElementById("kegiatan-list");
+        const noKegiatanMessage = document.getElementById("no-kegiatan-message");
         const calendarMonth = document.getElementById("calendar-month");
         const prevBtn = document.getElementById("prev-month");
         const nextBtn = document.getElementById("next-month");
+        const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+        const isAdmin = true; // ⬅️ Hardcode untuk testing
 
-        // Hanya menampilkan kalender interaktif tanpa manipulasi data
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
-
-        // Data statis kegiatan (tanpa penyimpanan/hapus/tambah)
+        // Data statis kegiatan (hanya untuk tampilan)
         const staticEvents = {
             "2025-12-03": ["Rapat RT pukul 19.00 WIB"],
             "2025-12-10": ["Kerja bakti lingkungan pukul 07.00 WIB"],
             "2025-12-24": ["Perayaan Natal Bersama Warga"]
         };
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
 
         function renderCalendar(month, year) {
             const firstDay = new Date(year, month, 1).getDay();
@@ -355,19 +386,64 @@
             }
             calendar.innerHTML = html;
 
-            // Tambahkan interaksi klik untuk menampilkan info
+            // Tambahkan interaksi klik untuk menampilkan kegiatan
             document.querySelectorAll(".day").forEach(day => {
-                day.addEventListener("click", () => {
-                    document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
-                    day.classList.add("selected");
-
-                    const dateKey = day.getAttribute("data-date");
-                    if (staticEvents[dateKey]) {
-                        eventDetails.innerHTML = `<p><strong>Kegiatan:</strong> ${staticEvents[dateKey].join(', ')}</p>`;
-                    } else {
-                        eventDetails.innerHTML = "<p>Tidak ada kegiatan di tanggal ini.</p>";
+                day.addEventListener("click", function () {
+                    if (!isLoggedIn) {
+                        window.location.href = '/page/masukpage';
+                        return;
                     }
+
+                    // Hapus highlight sebelumnya
+                    document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+                    this.classList.add("selected");
+
+                    const dateKey = this.getAttribute("data-date");
+                    renderKegiatanList(dateKey);
                 });
+            });
+
+            // Render kegiatan default (tanggal pertama yang punya event)
+            renderDefaultKegiatan(month, year, daysInMonth);
+        }
+
+        function renderDefaultKegiatan(month, year, daysInMonth) {
+            let found = false;
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                if (staticEvents[dateKey]) {
+                    renderKegiatanList(dateKey);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                kegiatanList.innerHTML = '';
+                noKegiatanMessage.style.display = 'block';
+            }
+        }
+
+        function renderKegiatanList(dateKey) {
+            if (!staticEvents[dateKey]) {
+                kegiatanList.innerHTML = '';
+                noKegiatanMessage.style.display = 'block';
+                return;
+            }
+
+            noKegiatanMessage.style.display = 'none';
+            kegiatanList.innerHTML = '';
+
+            staticEvents[dateKey].forEach((kegiatan, index) => {
+                const item = document.createElement('div');
+                item.className = 'kegiatan-item';
+
+                let deleteBtn = '';
+                if (isAdmin) {
+                    deleteBtn = `<button class="btn-delete-kegiatan" onclick="document.getElementById('hapusKegiatanPopup').style.display='flex'">×</button>`;
+                }
+
+                item.innerHTML = `<span>${kegiatan}</span> ${deleteBtn}`;
+                kegiatanList.appendChild(item);
             });
         }
 
@@ -389,6 +465,7 @@
             renderCalendar(currentMonth, currentYear);
         });
 
+        // Init
         renderCalendar(currentMonth, currentYear);
     });
     </script>
