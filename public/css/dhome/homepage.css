@@ -78,17 +78,21 @@ nav a.active {
 .auth-buttons .btn-masuk,
 .auth-buttons .btn-daftar {
   display: inline-block;
-  padding: 0.25rem 0.875rem; /* ~19px tinggi total */
-  border-radius: 50px;       /* bentuk oval */
+  padding: 0.25rem 0.875rem;
+  /* ~19px tinggi total */
+  border-radius: 50px;
+  /* bentuk oval */
   font-weight: 500;
   font-size: 0.875rem;
   font-family: "Poppins", sans-serif;
-  text-decoration: none;     /* hapus garis bawah link */
+  text-decoration: none;
+  /* hapus garis bawah link */
   text-align: center;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s ease;
-  color: inherit;            /* biarkan warna diatur per class */
+  color: inherit;
+  /* biarkan warna diatur per class */
 }
 
 /* Button MASUK */
@@ -113,6 +117,7 @@ nav a.active {
   background-color: #153627;
   border-color: #153627;
 }
+
 /* ==========================
    Hero Section
 ========================== */
@@ -120,7 +125,7 @@ nav a.active {
   position: relative;
   height: calc(40vh + 80px);
   background: linear-gradient(white 0 50px, transparent 20px),
-              url("/assets/bali 1.png") center/cover no-repeat;
+    url("/assets/bali 1.png") center/cover no-repeat;
   display: flex;
   align-items: center;
 }
@@ -288,10 +293,13 @@ nav a.active {
   bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2rem; /* ⬅️ Ukuran lebih besar, lebih kelihatan */
+  font-size: 2rem;
+  /* ⬅️ Ukuran lebih besar, lebih kelihatan */
   color: #4ade80;
-  width: 12px;      /* ⬅️ Memberi ruang untuk titik */
-  height: 12px;     /* ⬅️ Memberi ruang untuk titik */
+  width: 12px;
+  /* ⬅️ Memberi ruang untuk titik */
+  height: 12px;
+  /* ⬅️ Memberi ruang untuk titik */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,15 +353,21 @@ nav a.active {
 }
 
 .galeri-card {
+  width: 320px !important;
+  flex-shrink: 0 !important;
+  max-width: none !important;
+  min-height: 350px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 320px; /* ⬅️ Lebar tetap kecil */
+  justify-content: flex-start;
+  padding: 1.25rem;
   background-color: #f3f4f6;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  padding: 1.25rem;
+  margin-right: 1.5rem;
+  /* ← Jarak ke kanan */
+  margin-left: 0;
+  /* Biarkan kiri kosong agar alignment rapi */
 }
 
 .galeri-card img {
@@ -419,561 +433,640 @@ nav a.active {
 
 /* User Welcome with Avatar */
 .user-welcome {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #e5e7eb;
-    border: 2px solid #1C4532;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #e5e7eb;
+  border: 2px solid #1C4532;
 }
 
 .welcome-text {
-    color: #14532d;
-    font-weight: 600;
+  color: #14532d;
+  font-weight: 600;
+}
+
+/* Sembunyikan scrollbar tapi tetap bisa discroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* ==========================
    Kalender - Event Actions (Admin Only)
 ========================== */
 .event-actions {
-    margin-top: 8px;
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    flex-wrap: wrap;
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .event-btn {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    white-space: nowrap;
-    transition: all 0.2s ease;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
 .btn-add {
-    background-color: #4ade80;
-    color: #064e3b;
+  background-color: #4ade80;
+  color: #064e3b;
 }
 
 .btn-edit {
-    background-color: #fbbf24;
-    color: #92400e;
+  background-color: #fbbf24;
+  color: #92400e;
 }
 
 .btn-delete {
-    background-color: #f87171;
-    color: #991b1b;
+  background-color: #f87171;
+  color: #991b1b;
 }
 
 .btn-add:hover {
-    background-color: #22c55e;
-    transform: translateY(-1px);
+  background-color: #22c55e;
+  transform: translateY(-1px);
 }
 
 .btn-edit:hover {
-    background-color: #f59e0b;
-    transform: translateY(-1px);
+  background-color: #f59e0b;
+  transform: translateY(-1px);
 }
 
 .btn-delete:hover {
-    background-color: #ef4444;
-    transform: translateY(-1px);
+  background-color: #ef4444;
+  transform: translateY(-1px);
 }
 
 /* Pastikan event-details bisa menampung tombol */
 #event-details ul {
-    list-style: none;
-    text-align: left;
-    margin: 0;
-    padding-left: 16px; /* jarak kecil dari tepi kiri */
+  list-style: none;
+  text-align: left;
+  margin: 0;
+  padding-left: 16px;
+  /* jarak kecil dari tepi kiri */
 }
 
 #event-details ul li {
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    background-color: #f9fafb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #event-details ul li:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-/* Tombol hapus inline (admin only) */
-.btn-delete-inline {
-    background: none;
-    border: none;
-    color: #ef4444;
-    font-weight: bold;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0 4px;
-    line-height: 1;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+/* Tombol hapus "×" di daftar kegiatan kalender */
+.kegiatan-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.btn-delete-inline:hover {
-    opacity: 1;
-    color: #b91c1c;
+.kegiatan-item:last-child {
+  border-bottom: none;
+}
+
+.kegiatan-item span {
+  flex: 1;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.btn-delete-kegiatan {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-weight: bold;
+  font-size: 1.4rem;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.btn-delete-kegiatan:hover {
+  opacity: 1;
+  color: #b91c1c;
+}
+
+.btn-add-kegiatan {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #1C4532;
+  background-color: transparent;
+  color: #1C4532;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-add-kegiatan:hover {
+  background-color: #1C4532;
+  color: white;
 }
 
 /* ==========================
    Kalender - Tombol Outline (Warga & Admin)
 ========================== */
 .event-btn.btn-outline {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    color: #1C4532;
-    border: 1px solid #1C4532;
-    border-radius: 6px;
-    text-decoration: none;
-    background: transparent;
-    font-weight: 600;
-    transition: all 0.2s ease;
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  color: #1C4532;
+  border: 1px solid #1C4532;
+  border-radius: 6px;
+  text-decoration: none;
+  background: transparent;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .event-btn.btn-outline:hover {
-    background-color: #1C4532;
-    color: white;
-    transform: translateY(-1px);
+  background-color: #1C4532;
+  color: white;
+  transform: translateY(-1px);
 }
 
 /* ==========================
    Custom Delete Confirmation Popup
 ========================== */
 .delete-confirm-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 1rem;
-    box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .delete-confirm-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .delete-confirm-content h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #14532d;
-    margin: 0;
-    line-height: 1.4;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #14532d;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .delete-confirm-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 .delete-confirm-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .delete-confirm-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .delete-confirm-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    min-width: 100px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  min-width: 100px;
 }
 
 .btn-cancel {
-    background-color: #dc2626;
-    color: white;
+  background-color: #dc2626;
+  color: white;
 }
 
 .btn-cancel:hover {
-    background-color: #b91c1c;
+  background-color: #b91c1c;
 }
 
 .btn-confirm {
-    background-color: #1C4532;
-    color: white;
+  background-color: #1C4532;
+  color: white;
 }
 
 .btn-confirm:hover {
-    background-color: #153627;
+  background-color: #153627;
 }
 
 /* Tombol hapus di galeri */
 .btn-delete-galeri {
-    background: none;
-    border: none;
-    color: #ef4444;
-    font-weight: bold;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 4px;
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 0.2s;
+  background: none;
+  border: none;
+  color: #ef4444;
+  /* Merah */
+  font-weight: bold;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  opacity: 0.7;
+  transition: opacity 0.2s;
 }
 
-.galeri-item:hover .btn-delete-galeri {
-    opacity: 1;
+.galeri-card {
+  position: relative;
+  /* Penting agar tombol absolut berada di dalam card */
+}
+
+.btn-delete-galeri:hover {
+  opacity: 1;
+  color: #b91c1c;
 }
 
 /* ==========================
    Fitur Wargaku - Judul (Sesuai Gaya Galeri)
 ========================== */
 .wargaku-title {
-    color: #14532d;
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 2.5rem;
-    font-weight: 700;
+  color: #14532d;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
 }
 
 /* ==========================
    Fitur Wargaku - Container Tabel (Versi Diperbaiki)
 ========================== */
 .wargaku-container {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    padding: 1.5rem;
-    max-width: 900px;
-    margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .wargaku-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: "Poppins", sans-serif;
-    font-size: 1rem; /* ✅ Lebih besar dari sebelumnya */
-    color: #333;
-    margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  /* ✅ Lebih besar dari sebelumnya */
+  color: #333;
+  margin: 0;
 }
 
 /* Header (Baris Abu-Abu) — Full Width */
 .wargaku-table thead th {
-    background-color: #f9fafb;
-    font-weight: 600;
-    color: #14532d;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    padding: 14px 16px; /* ✅ Padding lebih besar */
-    text-align: left;
-    border-bottom: 2px solid #e2e8f0; /* ✅ Border tebal sedikit */
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #14532d;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  padding: 14px 16px;
+  /* ✅ Padding lebih besar */
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+  /* ✅ Border tebal sedikit */
 }
 
 /* Kolom "No" — Tetap sempit */
 .wargaku-table th:first-child,
 .wargaku-table td:first-child {
-    width: 8%; /* ✅ Lebih sempit */
-    text-align: center;
-    padding: 14px 8px;
+  width: 8%;
+  /* ✅ Lebih sempit */
+  text-align: center;
+  padding: 14px 8px;
 }
 
 /* Kolom Nama — Lebar lebih besar */
 .wargaku-table th:nth-child(2),
 .wargaku-table td:nth-child(2) {
-    width: 65%; /* ✅ Lebih luas */
+  width: 65%;
+  /* ✅ Lebih luas */
 }
 
 /* Kolom Aksi — Rata tengah */
 .wargaku-table th:last-child,
 .wargaku-table td:last-child {
-    width: 27%; /* ✅ Cukup untuk tombol */
-    text-align: center;
+  width: 27%;
+  /* ✅ Cukup untuk tombol */
+  text-align: center;
 }
 
 /* Body Tabel */
 .wargaku-table tbody tr {
-    transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .wargaku-table tbody tr:hover {
-    background-color: #f3f4f6;
+  background-color: #f3f4f6;
 }
 
 .wargaku-table tbody td {
-    padding: 14px 16px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-    vertical-align: middle;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
 }
 
 .wargaku-table tbody td:first-child {
-    text-align: center;
+  text-align: center;
 }
 
 .wargaku-table tbody td:last-child {
-    text-align: center;
+  text-align: center;
 }
 
 /* Tombol Aksi */
 .wargaku-table .aksi-btn {
-    padding: 6px 12px; /* ✅ Lebih besar */
-    border: none;
-    border-radius: 6px;
-    font-size: 0.85rem; /* ✅ Lebih besar */
-    cursor: pointer;
-    font-weight: 600;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-    background-color: #4ade80;
-    color: #064e3b;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* ✅ Efek halus */
+  padding: 6px 12px;
+  /* ✅ Lebih besar */
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  /* ✅ Lebih besar */
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  background-color: #4ade80;
+  color: #064e3b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* ✅ Efek halus */
 }
 
 .wargaku-table .aksi-btn:hover {
-    background-color: #22c55e;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background-color: #22c55e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* ==========================
    Custom Logout Confirmation Popup
 ========================== */
 .logout-confirm-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 1rem;
-    box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .logout-confirm-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .logout-confirm-content h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #14532d;
-    margin: 0;
-    line-height: 1.4;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #14532d;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .logout-confirm-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 .logout-confirm-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .logout-confirm-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .logout-confirm-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    min-width: 100px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  min-width: 100px;
 }
 
 /* Tombol BATAL → merah pudar */
 .btn-cancel {
-    background-color: #f87171; /* 🔴 Merah pudar */
-    color: white;
-    border: 1px solid #fca5a5; /* Optional: border lebih pudar */
+  background-color: #f87171;
+  /* 🔴 Merah pudar */
+  color: white;
+  border: 1px solid #fca5a5;
+  /* Optional: border lebih pudar */
 }
 
 .btn-cancel:hover {
-    background-color: #f43f5e; /* 🔴 Merah sedikit lebih gelap saat hover */
-    transform: translateY(-1px);
+  background-color: #f43f5e;
+  /* 🔴 Merah sedikit lebih gelap saat hover */
+  transform: translateY(-1px);
 }
 
 /* Tombol LOG OUT → merah pekat */
 .btn-logout {
-    background-color: #dc2626; /* 🔴 Merah pekat */
-    color: white;
-    border: 1px solid #be123c; /* Optional: border lebih gelap */
+  background-color: #dc2626;
+  /* 🔴 Merah pekat */
+  color: white;
+  border: 1px solid #be123c;
+  /* Optional: border lebih gelap */
 }
 
 .btn-logout:hover {
-    background-color: #b91c1c; /* 🔴 Merah sangat gelap saat hover */
-    transform: translateY(-1px);
+  background-color: #b91c1c;
+  /* 🔴 Merah sangat gelap saat hover */
+  transform: translateY(-1px);
 }
 
 /* ==========================
    Popup Detail Warga
 ========================== */
 .detail-warga-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 1rem;
-    box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .detail-warga-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    max-width: 500px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .detail-warga-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 .detail-warga-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .detail-warga-data {
-    font-family: "Poppins", sans-serif;
-    font-size: 0.95rem;
-    color: #333;
-    line-height: 1.6;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
 }
 
 .detail-warga-data p {
-    margin: 0.5rem 0;
+  margin: 0.5rem 0;
 }
 
 .detail-warga-data strong {
-    color: #14532d;
+  color: #14532d;
 }
 
 .detail-warga-btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    background-color: #1C4532;
-    color: white;
-    font-size: 0.9rem;
-    align-self: center;
-    transition: background-color 0.2s;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #1C4532;
+  color: white;
+  font-size: 0.9rem;
+  align-self: center;
+  transition: background-color 0.2s;
 }
 
 .detail-warga-btn:hover {
-    background-color: #153627;
+  background-color: #153627;
 }
 
 /* ==========================
    Tombol Selamat Datang (User Welcome Button)
 ========================== */
 .btn-welcome {
-    display: inline-block;
-    padding: 0.25rem 0.875rem; /* ~19px tinggi total */
-    border-radius: 50px;       /* bentuk oval */
-    font-weight: 500;
-    font-size: 0.875rem;
-    font-family: "Poppins", sans-serif;
-    text-decoration: none;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #1C4532;
-    background-color: #1C4532;
-    color: white;
-    transition: all 0.2s ease;
+  display: inline-block;
+  padding: 0.25rem 0.875rem;
+  /* ~19px tinggi total */
+  border-radius: 50px;
+  /* bentuk oval */
+  font-weight: 500;
+  font-size: 0.875rem;
+  font-family: "Poppins", sans-serif;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #1C4532;
+  background-color: #1C4532;
+  color: white;
+  transition: all 0.2s ease;
 }
 
 .btn-welcome:hover {
-    background-color: #153627;
-    border-color: #153627;
-    transform: translateY(-1px);
+  background-color: #153627;
+  border-color: #153627;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 640px) {

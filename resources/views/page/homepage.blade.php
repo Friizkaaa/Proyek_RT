@@ -70,9 +70,9 @@
         <main class="pt-24">
 
         <!-- HERO SECTION -->
-        <section id="beranda" class="hero">
+        <section id="beranda" class="hero" style="background-image: url('assets/bg-ibru.jpeg'); background-size: cover; background-position: center; ">
             <div class="hero-content text-left">
-                <h1 class="hero-title">
+                <h1 class="hero-title" style="color: white;">
                     Selamat Datang!<br>
                     Di RT. 02 <br>
                 </h1>
@@ -93,9 +93,6 @@
         <!-- ==========================
             KALENDER KEGIATAN
         ========================== -->
-<!-- ==========================
-    KALENDER KEGIATAN
-========================== -->
         <section id="kalender">
             <div class="kalender-container">
                 <h2>Kalender Kegiatan</h2>
@@ -115,12 +112,40 @@
                 <!-- Grid Tanggal -->
                 <div id="calendar" class="calendar-grid"></div>
 
-                <!-- Keterangan Event -->
-                <div id="event-details" class="event-details">Pilih tanggal pada kalender untuk melihat kegiatan.</div>
+                <!-- Daftar Kegiatan + Tombol Tambah -->
+                <div class="kegiatan-section">
+                    <div id="kegiatan-list" class="kegiatan-list">
+                        <p id="no-kegiatan-message" class="text-center text-gray-500 mt-4">Tidak ada kegiatan untuk bulan ini.</p>
+                    </div>
 
-                <button onClick="window.location.href='{{ route('formact') }}'" class="btn btn-white-green w-50 d-flex justify-content-center">+ Tambah Kegiatan</button>
+                    <!-- Tombol Tambah Kegiatan (selalu tampil jika login) -->
+                    @if (Auth::check())
+                    <div class="text-center mt-4">
+                        <input type="hidden" name="tanggal" id="selected-date">
+                        <a href="/page/formact" class="btn-add-kegiatan">+ Tambah Kegiatan</a>
+                    </div>
+                    @endif
+                </div>
             </div>
         </section>
+
+        <!-- Popup Konfirmasi Hapus Kegiatan -->
+        <div id="hapusKegiatanPopup" class="delete-confirm-popup" style="display: none;">
+            <div class="delete-confirm-content">
+                <h3>Apakah anda yakin ingin menghapus kegiatan ini?</h3>
+                <div class="delete-confirm-image">
+                    <img src="/assets/hapuspopup.png" alt="Konfirmasi Hapus">
+                </div>
+                <div class="delete-confirm-buttons">
+                    <button class="delete-confirm-btn btn-cancel" onclick="document.getElementById('hapusKegiatanPopup').style.display='none'">
+                        BATAL
+                    </button>
+                    <button class="delete-confirm-btn btn-delete" type="button" onclick="hapusKegiatan()">
+                        YA
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- ==========================
             GALERI KEGIATAN (Versi Statis - Card Lebih Kecil, Tombol di Kanan Bawah)
@@ -129,144 +154,184 @@
             <div class="container mx-auto px-6 max-w-6xl">
                 <h2 class="text-3xl font-bold text-green-800 mb-10 text-center">Galeri</h2>
 
-                <!-- Container Utama -->
-                <div class="flex flex-wrap justify-start gap-6">
-                    @foreach ($fotos as $foto )
-                    <!-- Card Galeri (lebar lebih kecil, posisi kiri) -->
-                    <div class="galeri-card w-full max-w-xs"> <!-- ⬅️ max-w-xs = lebih kecil -->
-                        <!-- Gambar Placeholder -->
-                        <img src="{{ $foto->foto ? Storage::url($foto->foto) : asset('bali_1.png') }}" alt="Gambar Galeri" class="w-full h-48 object-cover rounded-md mb-4">
+                @if ($fotos->isEmpty())
+                    <!-- Teks jika belum ada foto -->
+                    <p class="text-center text-gray-600 text-lg py-10">
+                        Belum ada foto atau galeri yang ditambahkan.
+                    </p>
+                @else
+                    <!-- Jika ada foto, tampilkan list -->
+                    <div class="flex overflow-x-auto gap-6 py-4 px-2"
+                        style="white-space: nowrap; display: flex; flex-wrap: nowrap; scroll-behavior: smooth;">
 
-                        <!-- Judul -->
-                        <h3 class="font-bold text-green-800 text-center mb-2">{{ $foto->judul }}</h3>
+                        @foreach ($fotos as $foto)
+                            <div class="galeri-card flex-shrink-0 w-80 bg-gray-100 rounded-xl shadow-sm p-4">
 
-                        <!-- Deskripsi -->
-                        <p class="text-sm text-gray-700 text-center mb-1">{{ $foto->deskripsi }}</p>
+                                @if (Auth::check() && Auth::user()->role === 'Admin')
+                                    <button class="btn-delete-galeri"
+                                            onclick="document.getElementById('hapusGaleriPopup').style.display='flex'">×
+                                    </button>
+                                @endif
 
-                        <!-- Tanggal -->
-                        <p class="text-xs text-gray-500 text-center">- {{ $foto->tanggal }}</p>
-                        
+                                <img src="{{ $foto->foto ? Storage::url($foto->foto) : asset('bali_1.png') }}"
+                                    alt="Gambar Galeri"
+                                    class="w-full h-48 object-cover rounded-md mb-4">
+
+                                <h3 class="font-bold text-green-800 text-center mb-2">{{ $foto->judul }}</h3>
+                                <p class="text-sm text-gray-700 text-center mb-1">{{ $foto->deskripsi }}</p>
+                                <p class="text-xs text-gray-500 text-center">- {{ $foto->tanggal }}</p>
+                            </div>
+
+                                    <!-- Popup Konfirmasi Hapus Galeri -->
+                                <div id="hapusGaleriPopup" class="delete-confirm-popup" style="display: none;">
+                                    <div class="delete-confirm-content">
+                                        <h3>Apakah anda yakin ingin menghapus foto ini?</h3>
+                                        <div class="delete-confirm-image">
+                                            <img src="/assets/hapuspopup.png" alt="Konfirmasi Hapus">
+                                        </div>
+                                        <form action="{{ route('delete-galeri', $foto->id) }}" method="POST" class="absolute top-2 right-2">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <div class="delete-confirm-buttons">
+                                                <!-- Tombol batal -->
+                                                <button type="button" 
+                                                        class="delete-confirm-btn btn-cancel"
+                                                        onclick="document.getElementById('hapusGaleriPopup').style.display='none'">
+                                                    BATAL
+                                                </button>
+
+                                                <!-- Tombol YA (submit DELETE) -->
+                                                <button type="submit" 
+                                                        class="delete-confirm-btn btn-delete">
+                                                    YA
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                        @endforeach
+
                     </div>
-                    @endforeach
-                </div>
+                @endif
 
-                <!-- Tombol Tambah Galeri (ditempatkan di kanan bawah) -->
-                @if (Auth::check() && Auth::user()->role === 'Admin')
-                <div class="mt-8 flex justify-end">
-                    <a href="{{ route('get-galeri') }}" class="add-galeri-btn">
-                        Tambah Galeri / Berita
-                    </a>
-                </div>
+                @if (Auth::check())
+                    <div class="mt-8 flex justify-end">
+                        <a href="{{ route('get-galeri') }}" class="btn-add-kegiatan">
+                            Tambah Galeri / Berita
+                        </a>
+                    </div>
                 @endif
 
             </div>
         </section>
 
-    <!-- ==========================
-        FITUR WARGAKU
-    ========================== -->
-    @if (Auth::check() && Auth::user()->role === 'Admin')
-        <section id="wargaku" class="py-20 bg-white">
-            <div class="container mx-auto px-6 max-w-6xl">
-                <h2 class="wargaku-title">Wargaku</h2>
 
-                <!-- Tabel Daftar Warga -->
-                <div class="wargaku-container">
-                    <table class="wargaku-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Lengkap</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="wargaku-list">
-                            @foreach ( $users as $user )
-                            <tr>
-                                <td>{{ $user->id}}</td>
-                                <td>{{ $user->nama_lengkap}}</td>
-                                <td>
-                                    <button class="aksi-btn" data-bs-toggle="modal" data-bs-target="#galeriModal" 
-                                    data-user-id="{{ $user->id }}"
-                                    data-user-nama-lengkap="{{ $user->nama_lengkap }}"
-                                    data-user-nik="{{ $user->nik }}"
-                                    data-user-alamat="{{ $user->alamat }}"
-                                    data-user-tgl="{{ $user->tanggal_lahir }}"
-                                    data-user-pekerjaan="{{ $user->pekerjaan }}"
-                                    data-user-status-keluarga="{{ $user->status_keluarga }}"
-                                    data-user-hp="{{ $user->no_hp }}"
-                                    >Lihat</button>
-                                </td>                                
-                            </tr>    
-                            @endforeach                        
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    @endif
+            <!-- ==========================
+                FITUR WARGAKU
+            ========================== -->
+            @if (Auth::check() && Auth::user()->role === 'Admin')
+                <section id="wargaku" class="py-20 bg-white">
+                    <div class="container mx-auto px-6 max-w-6xl">
+                        <h2 class="wargaku-title">Wargaku</h2>
 
-    <!-- Modal -->
-    <div class="modal fade" id="galeriModal" tabindex="-1" aria-labelledby="galeriModalLabel" aria-hidden="true"> 
-        <div class="modal-dialog modal-lg"> <!-- modal-lg = ukuran besar -->
-            <div class="modal-content">
+                        <!-- Tabel Daftar Warga -->
+                        <div class="wargaku-container">
+                            <table class="wargaku-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="wargaku-list">
+                                    @foreach ( $users as $user )
+                                    <tr>
+                                        <td>{{ $user->id}}</td>
+                                        <td>{{ $user->nama_lengkap}}</td>
+                                        <td>
+                                            <button class="aksi-btn" data-bs-toggle="modal" data-bs-target="#galeriModal" 
+                                            data-user-id="{{ $user->id }}"
+                                            data-user-nama-lengkap="{{ $user->nama_lengkap }}"
+                                            data-user-nik="{{ $user->nik }}"
+                                            data-user-alamat="{{ $user->alamat }}"
+                                            data-user-tgl="{{ $user->tanggal_lahir }}"
+                                            data-user-pekerjaan="{{ $user->pekerjaan }}"
+                                            data-user-status-keluarga="{{ $user->status_keluarga }}"
+                                            data-user-hp="{{ $user->no_hp }}"
+                                            >Lihat</button>
+                                        </td>                                
+                                    </tr>    
+                                    @endforeach                        
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            @endif
 
-                <!-- Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="galeriModalLabel">Detail Warga</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+        <!-- Modal -->
+        <div class="modal fade" id="galeriModal" tabindex="-1" aria-labelledby="galeriModalLabel" aria-hidden="true"> 
+            <div class="modal-dialog modal-lg"> <!-- modal-lg = ukuran besar -->
+                <div class="modal-content">
 
-                <!-- Body -->
-                <div class="modal-body p-4">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">NAMA LENGKAP</h6>
-                                <p class="mb-0 fw-medium" id="detail-nama">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">NIK</h6>
-                                <p class="mb-0 fw-medium" id="detail-nik">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">ALAMAT</h6>
-                                <p class="mb-0 fw-medium" id="detail-alamat">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">TANGGAL LAHIR</h6>
-                                <p class="mb-0 fw-medium" id="detail-tgl">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">PEKERJAAN</h6>
-                                <p class="mb-0 fw-medium" id="detail-pekerjaan">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">STATUS KELUARGA</h6>
-                                <p class="mb-0 fw-medium" id="detail-status-keluarga">-</p>
-                            </div>
-                            
-                            <div class="detail-item mb-3 pb-3 border-bottom">
-                                <h6 class="text-muted mb-1 fw-semibold">NO. HP</h6>
-                                <p class="mb-0 fw-medium" id="detail-hp">-</p>
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="galeriModalLabel">Detail Warga</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">NAMA LENGKAP</h6>
+                                    <p class="mb-0 fw-medium" id="detail-nama">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">NIK</h6>
+                                    <p class="mb-0 fw-medium" id="detail-nik">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">ALAMAT</h6>
+                                    <p class="mb-0 fw-medium" id="detail-alamat">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">TANGGAL LAHIR</h6>
+                                    <p class="mb-0 fw-medium" id="detail-tgl">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">PEKERJAAN</h6>
+                                    <p class="mb-0 fw-medium" id="detail-pekerjaan">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">STATUS KELUARGA</h6>
+                                    <p class="mb-0 fw-medium" id="detail-status-keluarga">-</p>
+                                </div>
+                                
+                                <div class="detail-item mb-3 pb-3 border-bottom">
+                                    <h6 class="text-muted mb-1 fw-semibold">NO. HP</h6>
+                                    <p class="mb-0 fw-medium" id="detail-hp">-</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
 
+                </div>
             </div>
         </div>
-    </div>
 
     <!-- FOOTER -->
     <footer class="bg-gray-200 py-4 mt-20">
@@ -291,143 +356,217 @@
 
     <!-- ✅ SCRIPT UNTUK DYNAMICS USER (Guest vs Warga) -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const authSection = document.getElementById('auth-section');
-        const galeriActions = document.getElementById('galeri-actions');
+        document.addEventListener('DOMContentLoaded', function() {
+            const authSection = document.getElementById('auth-section');
+            const galeriActions = document.getElementById('galeri-actions');
 
-        if (localStorage.getItem('isLoggedIn') === 'true') {
-            const nama = localStorage.getItem('userNama') || 'Warga';
-            const role = localStorage.getItem('userRole') || 'warga';
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                const nama = localStorage.getItem('userNama') || 'Warga';
+                const role = localStorage.getItem('userRole') || 'warga';
 
-            authSection.innerHTML = `
-                <button class="btn-welcome" onclick="showLogoutPopup()">
-                    Selamat Datang, ${nama}
-                </button>
-            `;
-
-            if (role === 'warga' || role === 'admin') {
-                galeriActions.innerHTML = `
-                    <a href="/page/formgaleri" class="add-galeri-btn">
-                        Tambah Galeri / Berita
-                    </a>
+                authSection.innerHTML = `
+                    <button class="btn-welcome" onclick="showLogoutPopup()">
+                        Selamat Datang, ${nama}
+                    </button>
                 `;
+
+                if (role === 'warga' || role === 'admin') {
+                    galeriActions.innerHTML = `
+                        <a href="/page/formgaleri" class="add-galeri-btn">
+                            Tambah Galeri / Berita
+                        </a>
+                    `;
+                }
+            } else {
+                authSection.innerHTML = `
+                    <div class="auth-buttons">
+                        <a href="/page/masukpage" class="btn-masuk">MASUK</a>
+                        <a href="/page/daftarpage" class="btn-daftar">DAFTAR</a>
+                    </div>
+                `;
+                galeriActions.innerHTML = '';
             }
-        } else {
-            authSection.innerHTML = `
-                <div class="auth-buttons">
-                    <a href="/page/masukpage" class="btn-masuk">MASUK</a>
-                    <a href="/page/daftarpage" class="btn-daftar">DAFTAR</a>
-                </div>
-            `;
-            galeriActions.innerHTML = '';
-        }
-    });
+        });
     </script>
 
-    <!-- ✅ SCRIPT KALENDER - HANYA INTERAKTIF UI (TANPA LOGIKA BACKEND) -->
+    {{-- SCRIPT UNTUK KALENDER --}}
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const calendar = document.getElementById("calendar");
-        const eventDetails = document.getElementById("event-details");
-        const calendarMonth = document.getElementById("calendar-month");
-        const prevBtn = document.getElementById("prev-month");
-        const nextBtn = document.getElementById("next-month");
+        document.addEventListener("DOMContentLoaded", function () {
+            const calendar = document.getElementById("calendar");
+            const kegiatanList = document.getElementById("kegiatan-list");
+            const noKegiatanMessage = document.getElementById("no-kegiatan-message");
+            const calendarMonth = document.getElementById("calendar-month");
+            const prevBtn = document.getElementById("prev-month");
+            const nextBtn = document.getElementById("next-month");
+            const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+            const isAdmin = {{ Auth::check() && Auth::user()->role === 'Admin' ? 'true' : 'false' }};
+            let eventsData = {};
 
-        // Hanya menampilkan kalender interaktif tanpa manipulasi data
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
+            let kegiatanToDeleteId = null;
 
-        // Data statis kegiatan (tanpa penyimpanan/hapus/tambah)
-        const staticEvents = {} 
+            document.querySelectorAll('.btn-delete-kegiatan').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    kegiatanToDeleteId = this.getAttribute('data-id'); // simpan ID kegiatan
+                    document.getElementById('hapusKegiatanPopup').style.display = 'flex';
+                });
+            });
 
-        fetch('/kegiatan')
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(item => {
-                    if (!staticEvents[item.tanggal]) {
-                        staticEvents[item.tanggal] = [];
+            function hapusKegiatan() {
+                if (!kegiatanToDeleteId) return;
+
+                fetch(`/api/kegiatan/${kegiatanToDeleteId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
                     }
-                    staticEvents[item.tanggal].push(item.kegiatan);
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('hapusKegiatanPopup').style.display = 'none';
+                    renderCalendar(currentMonth, currentYear);
+                })
+                .catch(err => console.error(err));
+            }
+
+
+            fetch('/api/kegiatan')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        if (!eventsData[item.tanggal]) {
+                            eventsData[item.tanggal] = [];
+                        }
+                        eventsData[item.tanggal].push(item.kegiatan);
+                    });
+
+                    // Render kalender setelah data siap
+                    renderCalendar(currentMonth, currentYear);
+                })
+                .catch(err => console.error('Gagal mengambil data kegiatan:', err));
+
+            // Data statis kegiatan (hanya untuk tampilan)
+            // const staticEvents = {
+            //     "2025-12-03": ["Rapat RT pukul 19.00 WIB"],
+            //     "2025-12-10": ["Kerja bakti lingkungan pukul 07.00 WIB"],
+            //     "2025-12-24": ["Perayaan Natal Bersama Warga"]
+            // };
+
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+
+            function renderCalendar(month, year) {
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const offset = firstDay === 0 ? 6 : firstDay - 1;
+
+                calendarMonth.textContent = `${new Date(year, month).toLocaleString("id-ID", { month: "long" })} ${year}`;
+
+                let html = "";
+                for (let i = 0; i < offset; i++) html += "<div></div>";
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                    const hasEvent = eventsData.hasOwnProperty(dateKey);
+
+                    html += `
+                        <div class="day ${hasEvent ? 'has-event' : ''}" data-date="${dateKey}">
+                            ${i}
+                        </div>
+                    `;
+                }
+                calendar.innerHTML = html;
+
+                // Tambahkan interaksi klik untuk menampilkan kegiatan
+                document.querySelectorAll(".day").forEach(day => {
+                    day.addEventListener("click", function () {
+                        if (!isLoggedIn) {
+                            window.location.href = '/page/masukpage';
+                            return;
+                        }
+
+                        document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+                        this.classList.add("selected");
+
+                        const dateKey = this.getAttribute("data-date");
+
+                        const selectedDateInput = document.getElementById('selected-date');
+                        selectedDateInput.value = dateKey; // dateKey = tanggal yang diklik
+
+                        renderKegiatanList(dateKey);
+                    });
                 });
 
+                // Render kegiatan default
+                renderDefaultKegiatan(month, year, daysInMonth);
+            }
+
+            function renderDefaultKegiatan(month, year, daysInMonth) {
+                let found = false;
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                    if (eventsData[dateKey]) {
+                        renderKegiatanList(dateKey);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    kegiatanList.innerHTML = '';
+                    noKegiatanMessage.style.display = 'block';
+                }
+            }
+
+            function renderKegiatanList(dateKey) {
+                if (!eventsData[dateKey]) {
+                    kegiatanList.innerHTML = '';
+                    noKegiatanMessage.style.display = 'block';
+                    return;
+                }
+
+                noKegiatanMessage.style.display = 'none';
+                kegiatanList.innerHTML = '';
+
+                eventsData[dateKey].forEach((kegiatan, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'kegiatan-item';
+
+                    let deleteBtn = '';
+                    if (isLoggedIn) {
+                        deleteBtn = `<button class="btn-delete-kegiatan" data-id="${kegiatan.id}" onclick="document.getElementById('hapusKegiatanPopup').style.display='flex'">×</button>`;
+                    }
+
+                    item.innerHTML = `<span>${kegiatan}</span> ${deleteBtn}`;
+                    kegiatanList.appendChild(item);
+                });
+            }
+
+            prevBtn.addEventListener("click", () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
                 renderCalendar(currentMonth, currentYear);
             });
 
-        function renderCalendar(month, year) {
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const offset = firstDay === 0 ? 6 : firstDay - 1;
-
-            calendarMonth.textContent = `${new Date(year, month).toLocaleString("id-ID", { month: "long" })} ${year}`;
-
-            let html = "";
-            for (let i = 0; i < offset; i++) html += "<div></div>";
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                const hasEvent = staticEvents.hasOwnProperty(dateKey);
-
-                html += `
-                    <div class="day ${hasEvent ? 'has-event' : ''}" data-date="${dateKey}">
-                        ${i}
-                    </div>
-                `;
-            }
-            calendar.innerHTML = html;
-
-            document.querySelectorAll(".day").forEach(day => {
-                day.addEventListener("click", () => {
-
-                    const isLoggedIn = @json(Auth::check());
-
-                    if (!isLoggedIn) {
-                        window.location.href = "{{ route('login') }}";
-                        return;
-                    }
-                });
+            nextBtn.addEventListener("click", () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                renderCalendar(currentMonth, currentYear);
             });
 
-
-            // Tambahkan interaksi klik untuk menampilkan info
-            document.querySelectorAll(".day").forEach(day => {
-                day.addEventListener("click", () => {
-                    document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
-                    day.classList.add("selected");
-
-                    const dateKey = day.getAttribute("data-date");
-                    if (staticEvents[dateKey]) {
-                        eventDetails.innerHTML = `<p><strong>Kegiatan:</strong> ${staticEvents[dateKey].join(', ')}</p>`;
-                    } else {
-                        eventDetails.innerHTML = "<p>Tidak ada kegiatan di tanggal ini.</p>";
-                    }
-                });
-            });
-        }
-
-        prevBtn.addEventListener("click", () => {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
+            // Mulai render kalender
             renderCalendar(currentMonth, currentYear);
         });
-
-        nextBtn.addEventListener("click", () => {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            renderCalendar(currentMonth, currentYear);
-        });
-
-        renderCalendar(currentMonth, currentYear);
-    });
     </script>
 
     <!-- ✅ SCRIPT UNTUK GALERI DINAMIS + HAPUS -->
     <script>
-    // ... [SCRIPT GALLERY TETAP DIPERTAHANKAN APA ADANYA KARENA BUKAN BAGIAN KALENDER]
+        // ... [SCRIPT GALLERY TETAP DIPERTAHANKAN APA ADANYA KARENA BUKAN BAGIAN KALENDER]
         document.addEventListener("DOMContentLoaded", function () {
             const galeriSlider = document.getElementById('galeri-slider');
             const slideBtnPrev = document.querySelector('.slide-btn.prev');
@@ -545,7 +684,7 @@
         }).then(() => {
             window.location.href = "/";
         });
-    }
+        }
     </script>
 
     <script>
@@ -573,33 +712,6 @@
             document.getElementById('detail-hp').textContent = hp;
         });
     </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new Calendar(calendarEl, {
-                events: '/kegiatan',
-
-                eventClick: function(info) {
-
-                    var eventObj = info.event;
-
-                    if (eventObj.url) {
-                        // Redirect ke login
-                        window.location.href = eventObj.url;
-                    }
-
-                    // Jika sudah login → tampilkan detail
-                    alert("Kamu sudah login, event bisa dibuka!");
-                }
-            });
-
-            calendar.render();
-        });
-
-    </script>
-
 
 </body>
 </html>

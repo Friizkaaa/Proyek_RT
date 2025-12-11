@@ -38,7 +38,7 @@ class PageController extends Controller
             'kegiatan' => $request->kegiatan,
         ]);
 
-        return redirect()->route('homepage')->with('success');
+        return redirect()->route('homepage')->with('success', 'kegiatan berhasil ditambahkan');
     }
 
     public function getKegiatan()
@@ -54,4 +54,13 @@ class PageController extends Controller
 
         return response()->json($aktivitas);
     }
+
+    public function deleteKegiatan($id)
+    {
+        $kegiatan = Kegiatan::findOrFail($id);
+        $kegiatan->delete();
+
+        return response()->json(['message' => 'Kegiatan berhasil dihapus']);
+    }
+
 }

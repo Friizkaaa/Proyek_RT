@@ -48,7 +48,7 @@ class AuthController extends Controller
         $request->validate([
             'email'             => 'required|email|unique:users,email',
             'password'          => 'required|min:6',
-            'kode_warga'        => 'required',
+            'kode_warga'        => 'required|in:IBRU02',
             'nama_lengkap'      => 'required',
             'nik'               => 'required|digits:16',
             'alamat'            => 'required',

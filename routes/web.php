@@ -40,8 +40,13 @@ Route::get('/page/formact', [PageController::class, 'getTambahKegiatan'])->name(
 // Proses Tambah Kegiatan
 Route::post('/page/formact', [PageController::class, 'postTambahKegiatan'])->name('post-formact');
 
+// Proses Hapus Galeri
+Route::delete('/galeri/{id}', [GaleriController::class, 'postDeletefoto'])->name('delete-galeri');
+
+Route::delete('/kegiatan/{id}', [GaleriController::class, 'deleteKegiatan'])->name('delete-kegiatan');
+
 // Json Kegiatan
-Route::get('/kegiatan', [PageController::class, 'getKegiatan'])->name('aktivitas');
+Route::get('/api/kegiatan', [PageController::class, 'getKegiatan'])->name('aktivitas');
 
 
 // Form Tambah Kegiatan

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Galeri;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
@@ -34,8 +35,18 @@ class GaleriController extends Controller
         return redirect()->route('homepage')->with('success', 'Foto berhasil ditambahkan');
     }
 
-    public function postDeleteFoto()
+    public function postDeleteFoto($id)
     {
-        
+        $foto = Galeri::findOrFail($id);
+
+        // Hapus file dari storage jika ada
+        if (Storage::disk('public')->exists($foto->foto)) {
+            Storage::disk('public')->delete($foto->foto);
+        }
+
+        // Hapus dari database
+        $foto->delete();
+
+        return back()->with('success', 'Foto berhasil dihapus!');
     }
 }
